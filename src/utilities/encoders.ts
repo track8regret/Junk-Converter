@@ -11,7 +11,11 @@ const { JSDOM } = jsdom;
 const deflateRaw = promisify(zlib.deflateRaw);
 const inflateRaw = promisify(zlib.inflateRaw);
 
-interface Deck {
+class Deck implements DeckInterface {
+    constructor(public mainDeck: number[], public extraDeck: number[], public sideDeck: number[], public deckName?: string | null | undefined) { }
+}
+
+interface DeckInterface {
     deckName?: string | null | undefined;
     mainDeck: number[];
     extraDeck: number[];
@@ -24,11 +28,7 @@ interface JSONDeck {
     side: Deck['sideDeck']
 }
 
-var emptyDeck: Deck = {
-    mainDeck: [],
-    extraDeck: [],
-    sideDeck: []
-}
+var emptyDeck = new Deck([], [], []);
 
 abstract class Encoder {
     abstract decode(code: string): Promise<Deck> | Deck;
@@ -40,7 +40,7 @@ class YDKEncoder extends Encoder {
         var initial = code.split('\n');
         var fixedInitial = [];
         for (const entry of initial) {
-            if(entry.endsWith("\r")) {
+            if (entry.endsWith("\r")) {
                 var fixedEntry = entry.replace('\r', '')
                 fixedInitial.push(fixedEntry)
             } else {
@@ -51,21 +51,17 @@ class YDKEncoder extends Encoder {
         var extraIndex = fixedInitial.findIndex((element) => element === "#extra");
         var sideIndex = fixedInitial.findIndex((element) => element === "!side");
 
-        var mainDeck = fixedInitial.slice(mainIndex+1, extraIndex).map(str => {
+        var mainDeck = fixedInitial.slice(mainIndex + 1, extraIndex).map(str => {
             return Number(str);
         })
-        var extraDeck = fixedInitial.slice(extraIndex+1, sideIndex).map(str => {
+        var extraDeck = fixedInitial.slice(extraIndex + 1, sideIndex).map(str => {
             return (Number(str));
         })
-        var sideDeck = fixedInitial.slice(sideIndex+1).map(str => {
+        var sideDeck = fixedInitial.slice(sideIndex + 1).map(str => {
             return (Number(str));
         })
 
-        return {
-            mainDeck: mainDeck,
-            extraDeck: extraDeck,
-            sideDeck: sideDeck
-        }
+        return new Deck(mainDeck, extraDeck, sideDeck)
     }
     override encode(deck: Deck): string {
         var result = [];
@@ -83,12 +79,7 @@ class YDKEncoder extends Encoder {
 class YDKeEncoder extends Encoder {
     override decode(code: string): Deck {
         var parsed = ydke.parseURL(code);
-        return {
-            mainDeck: Array.from(parsed.main),
-            extraDeck: Array.from(parsed.extra),
-            sideDeck: Array.from(parsed.side)
-        }
-
+        return new Deck(Array.from(parsed.main), Array.from(parsed.extra), Array.from(parsed.side));
     }
     override encode(deck: Deck): string {
         return ydke.toURL({
@@ -100,7 +91,7 @@ class YDKeEncoder extends Encoder {
 }
 
 class OmegaEncoder extends Encoder {
-    getUnsignedLong(arr: Uint8Array, pos: number): number { 
+    getUnsignedLong(arr: Uint8Array, pos: number): number {
         const view = new DataView(arr.buffer, pos);
         return view.getUint32(0, true);
     }
@@ -120,7 +111,7 @@ class OmegaEncoder extends Encoder {
         var sidesize = inflated[position++];
         // 
 
-        if(mesize > 75 || sidesize > 15) {
+        if (mesize > 75 || sidesize > 15) {
             console.log('One of the deck sizes in an Omega code was too big; returning an empty deck.')
             return emptyDeck;
         }
@@ -140,9 +131,9 @@ class OmegaEncoder extends Encoder {
             and that fucks with getTypeForId for some reason
             so i'm just gonna throw the IDs for a loop and hope that it sorts itself out
             */
-            
+
             const cardType = getTypeForId(cardID, 'omega');
-            
+
             if (!cardType.includes('TYPE_FUSION') && !cardType.includes('TYPE_SYNCHRO') && !cardType.includes('TYPE_XYZ') && !cardType.includes('TYPE_LINK')) {
                 mainDeck.push(cardID);
             } else {
@@ -155,11 +146,7 @@ class OmegaEncoder extends Encoder {
             sideDeck.push(cardID);
         }
 
-        return {
-            mainDeck,
-            extraDeck,
-            sideDeck,
-        }
+        return new Deck(mainDeck, extraDeck, sideDeck)
     }
 
     override async encode(deck: Deck): Promise<string> {
@@ -252,11 +239,7 @@ class NamelistEncoder extends Encoder {
             }
         }
 
-        return {
-            mainDeck: mdai,
-            extraDeck: exai,
-            sideDeck: sdai
-        }
+        return new Deck(mdai, exai, sdai);
     }
     override encode(deck: Deck): string {
         var mdnd = [...new Set(deck.mainDeck)]
@@ -347,12 +330,7 @@ class KonamiEncoder extends Encoder {
             }
         }
 
-        return {
-            deckName: deckname,
-            mainDeck: mdai,
-            extraDeck: exai,
-            sideDeck: sdai
-        }
+        return new Deck(mdai, exai, sdai, deckname);
     }
     override encode(deck: Deck): string {
         return "Junk Converter cannot upload decks to the Konami database."
@@ -362,11 +340,7 @@ class KonamiEncoder extends Encoder {
 class JSONEncoder extends Encoder {
     override decode(code: string): Deck {
         var file: JSONDeck = JSON.parse(code)
-        return {
-            mainDeck: file.main,
-            extraDeck: file.extra,
-            sideDeck: file.side
-        }
+        return new Deck(file.main, file.extra, file.side)
     }
     override encode(deck: Deck): string {
         var result: JSONDeck = {

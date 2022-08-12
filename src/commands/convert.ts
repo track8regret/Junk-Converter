@@ -83,21 +83,18 @@ export class ConvertCommand extends SlashCommand {
     };
 
     async run(ctx: CommandContext) {
-        console.log(ctx.options);
-
         let deck: Deck | null = null;
         let modal: ModalInteractionContext | null = null;
-        let emptyDeck : Deck = {
-            mainDeck: [],
-            extraDeck: [],
-            sideDeck: []
-        }
+        let emptyDeck: Deck = new Deck([], [], []);
 
         switch (ctx.options.from) {
             case 'Convert from a .YDK file.':
                 var deckurl = ctx.attachments.first()?.url
                 if (!deckurl) {
-                    return ctx.send('You need to attach the YDK file you want to convert with the "file" option.')
+                    return ctx.send('You need to attach the YDK file you want to convert with the "file" option. Please try again.', { ephemeral: true })
+                }
+                if (!deckurl.endsWith('.ydk')) {
+                    return ctx.send('The file you submitted was not a YDK file. Please try again.', { ephemeral: true })
                 }
                 var ydkfile = await fetch(deckurl).then(e => e.text());
                 const ydkdecoder = new YDKEncoder();
@@ -118,6 +115,9 @@ export class ConvertCommand extends SlashCommand {
                     }]
                 });
                 modal = mctx;
+                if (!mctx.values.ydkein.startsWith('ydke://')) {
+                    return ctx.send('The URI you entered was not for a YDKe. Please try again.', { ephemeral: true })
+                }
                 var ydkedecoder = new YDKeEncoder();
                 deck = await ydkedecoder.decode(mctx.values.ydkein);
                 break;
@@ -162,6 +162,9 @@ export class ConvertCommand extends SlashCommand {
                 if (!deckurl) {
                     return ctx.send('You need to attach the JSON file you want to convert with the "file" option.')
                 }
+                if (!deckurl.endsWith('.json')) {
+                    return ctx.send('The file you submitted was not a JSON file. Please try again.', { ephemeral: true })
+                }
                 var jsonfile = await fetch(deckurl).then(e => e.text());
                 const jsondecoder = new JSONEncoder();
                 deck = await jsondecoder.decode(jsonfile)
@@ -181,6 +184,11 @@ export class ConvertCommand extends SlashCommand {
                     }]
                 });
                 modal = mctx;
+
+                if (!mctx.values.konamiin.startsWith('https://www.db.yugioh-card.com/yugiohdb/member_deck.action?cgid=')) {
+                    return ctx.send('The URL you entered either isn\'t from Konami\'s database, or was entered incorrectly.\nPlease try again.', { ephemeral: true })
+                }
+
                 var konamidecoder = new KonamiEncoder();
                 deck = await konamidecoder.decode(mctx.values.konamiin);
                 break;
@@ -194,23 +202,54 @@ export class ConvertCommand extends SlashCommand {
                             label: 'YGOPRODeck URL',
                             style: TextInputStyle.SHORT,
                             custom_id: 'ypdin',
-                            placeholder: 'https://ygoprodeck.com/'
+                            placeholder: 'https://ygoprodeck.com/deck/'
                         }]
                     }]
                 });
                 modal = mctx;
 
+                if (!mctx.values.ypdin.startsWith('https://ygoprodeck.com/deck/')) {
+                    return ctx.send('The URL you entered either isn\'t from YGOPRODeck, or was input incorrectly.\nPlease try again.', { ephemeral: true })
+                }
+
                 var page = await fetch(mctx.values.ypdin).then(e => e.text());
                 var dom = new JSDOM(page);
-                var document = dom.window.document;
-                var ydkurl = document.querySelector<HTMLAnchorElement>('a[download]')?.href?.trim();
-                if (ydkurl === undefined) {
-                    return ctx.send('The URL provided isn\'t a deck list. Please make sure you\'re inputting a deck page.');
-                }
-                var thingtoconvert = await fetch(ydkurl).then(e => e.text());
-                var ypddecoder = new YDKEncoder();
-                deck = await ypddecoder.decode(thingtoconvert)
 
+                // Find the right script tag
+                const scriptContents = [...dom.window.document.querySelectorAll('script')]
+                    .map(e => e.textContent)
+                    .filter(e => e !== null)
+                    .find(e => /var maindeckjs = /.test(e!));
+                
+                if (!scriptContents) {
+                    return ctx.send('The YGOPRODeck URL you submitted doesn\'t exist. Please try again.')
+                }
+
+                let ypdmain: number[];
+                let ypdextra: number[];
+                let ypdside: number[];
+
+                // Evaluate script variables and get their parsed values
+                var maindeckjs: string[] = JSON.parse(eval((scriptContents.match(/var maindeckjs = (.*);/m)![1])));
+                var extradeckjs: string[] | null = JSON.parse(eval((scriptContents.match(/var extradeckjs = (.*);/m)![1])));
+                var sidedeckjs: string[] | null = JSON.parse(eval((scriptContents.match(/var sidedeckjs = (.*);/m)![1])));
+
+                ypdmain = maindeckjs.map(Number)
+
+                if (extradeckjs === null) {
+                    ypdextra = [];
+                } else {
+                    ypdextra = extradeckjs.map(Number)
+                }
+
+                if (sidedeckjs === null) {
+                    ypdside = [];
+                } else {
+                    ypdside = sidedeckjs.map(Number)
+                }
+
+                deck = new Deck(ypdmain, ypdextra, ypdside)
+                break;
         };
 
         if (deck === null || deck === emptyDeck) {
@@ -225,17 +264,17 @@ export class ConvertCommand extends SlashCommand {
                 var buffer = Buffer.from(result, 'utf8');
                 var attachment = { file: buffer, name: (ctx.options.name ?? deck.deckName ?? 'result') + '.ydk' };
 
-                if(modal) {
-                    modal.send('Here\'s your converted YDK file:', {file: attachment})
+                if (modal) {
+                    modal.send('Here\'s your converted YDK file:', { file: attachment })
                 } else {
-                    ctx.send('Here\'s your converted YDK file:', {file: attachment})
+                    ctx.send('Here\'s your converted YDK file:', { file: attachment })
                 }
                 break;
             case 'Convert to a YDKE string.':
                 var ydkeencoder = new YDKeEncoder();
                 var result = await ydkeencoder.encode(deck);
 
-                if(modal) {
+                if (modal) {
                     modal.send('Here\'s your converted YDKe link:\n`' + result + '`')
                 } else {
                     ctx.send('Here\'s your converted YDKe link:\n`' + result + '`')
@@ -245,7 +284,7 @@ export class ConvertCommand extends SlashCommand {
                 var omegaencoder = new OmegaEncoder();
                 var result = await omegaencoder.encode(deck);
 
-                if(modal) {
+                if (modal) {
                     modal.send('Here\'s your converted Omega code:\n`' + result + '`')
                 } else {
                     ctx.send('Here\'s your converted Omega code:\n`' + result + '`')
@@ -255,7 +294,7 @@ export class ConvertCommand extends SlashCommand {
                 var namelistencoder = new NamelistEncoder();
                 var result = await namelistencoder.encode(deck);
 
-                if(modal) {
+                if (modal) {
                     modal.send('Here\'s your converted card name list:\n```' + result + '```')
                 } else {
                     ctx.send('Here\'s your converted card name list:\n```' + result + '```')
@@ -267,10 +306,10 @@ export class ConvertCommand extends SlashCommand {
                 var buffer = Buffer.from(result, 'utf8');
                 var attachment = { file: buffer, name: (ctx.options.name ?? deck.deckName ?? 'result') + '.json' };
 
-                if(modal) {
-                    modal.send('Here\'s your converted JSON file:', {file: attachment})
+                if (modal) {
+                    modal.send('Here\'s your converted JSON file:', { file: attachment })
                 } else {
-                    ctx.send('Here\'s your converted JSON file:', {file: attachment})
+                    ctx.send('Here\'s your converted JSON file:', { file: attachment })
                 }
                 break;
         }
