@@ -116,7 +116,7 @@ export class ConvertCommand extends SlashCommand {
                 });
                 modal = mctx;
                 if (!mctx.values.ydkein.startsWith('ydke://')) {
-                    return ctx.send('The URI you entered was not for a YDKe. Please try again.', { ephemeral: true })
+                    return mctx.send('The URI you entered was not for a YDKe. Please try again.', { ephemeral: true })
                 }
                 var ydkedecoder = new YDKeEncoder();
                 deck = await ydkedecoder.decode(mctx.values.ydkein);
@@ -186,7 +186,7 @@ export class ConvertCommand extends SlashCommand {
                 modal = mctx;
 
                 if (!mctx.values.konamiin.startsWith('https://www.db.yugioh-card.com/yugiohdb/member_deck.action?cgid=')) {
-                    return ctx.send('The URL you entered either isn\'t from Konami\'s database, or was entered incorrectly.\nPlease try again.', { ephemeral: true })
+                    return mctx.send('The URL you entered either isn\'t from Konami\'s database, or was entered incorrectly.\nPlease try again.', { ephemeral: true })
                 }
 
                 var konamidecoder = new KonamiEncoder();
@@ -209,7 +209,7 @@ export class ConvertCommand extends SlashCommand {
                 modal = mctx;
 
                 if (!mctx.values.ypdin.startsWith('https://ygoprodeck.com/deck/')) {
-                    return ctx.send('The URL you entered either isn\'t from YGOPRODeck, or was input incorrectly.\nPlease try again.', { ephemeral: true })
+                    return mctx.send('The URL you entered either isn\'t from YGOPRODeck, or was input incorrectly.\nPlease try again.', { ephemeral: true })
                 }
 
                 var page = await fetch(mctx.values.ypdin).then(e => e.text());
@@ -222,7 +222,7 @@ export class ConvertCommand extends SlashCommand {
                     .find(e => /var maindeckjs = /.test(e!));
                 
                 if (!scriptContents) {
-                    return ctx.send('The YGOPRODeck URL you submitted doesn\'t exist. Please try again.')
+                    return mctx.send('The YGOPRODeck URL you submitted doesn\'t exist. Please try again.')
                 }
 
                 let ypdmain: number[];
