@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+      "lib": ["es2021", "DOM.Iterable"],
+      "module": "NodeNext",
+      "target": "es2021",
+      "moduleResolution": "NodeNext",
+  
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "sourceMap": true,
+  
+      "outDir": "dist",
+      "rootDir": "src"
+    },
+  
+    "include": ["src/**/*"]
+  }
