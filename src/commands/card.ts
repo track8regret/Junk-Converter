@@ -316,10 +316,10 @@ export class CardCommand extends SlashCommand {
                 text: 'ID: ' + cardinfo.id
             },
             title: cardinfo.name,
-            url: 'https://db.ygoprodeck.com/card/?search=' + encodeURIComponent(cardinfo.name),
+            url: 'https://ygoprodeck.com/card/?search=' + encodeURIComponent(cardinfo.name),
             color: embedcolor,
             thumbnail: {
-                url: 'https://storage.googleapis.com/ygoprodeck.com/pics_artgame/' + cardinfo.id + '.jpg'
+                url: 'https://images.ygoprodeck.com/images/cards_cropped/' + cardinfo.id + '.jpg'
             },
             description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + emojis.race[cardinfo.race as keyof typeof emojis.race] + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : ''),
             fields: embedfields
