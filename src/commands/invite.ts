@@ -14,6 +14,6 @@ export class InviteCommand extends SlashCommand {
   }
 
   async run(ctx: CommandContext) {
-    return ctx.send('To invite Junk Converter, you can either click/tap on its user profile and select "Add to Server," or you can click the link below.\n\nhttps://discord.com/api/oauth2/authorize?client_id=990092946848223322&permissions=0&scope=bot%20applications.commands', {'ephemeral': true})
+    return ctx.send('To invite Junk Converter, you can either click/tap on its user profile and select "Add to Server," or you can click the link below.\n\nhttps://discord.com/api/oauth2/authorize?client_id=990092946848223322&permissions=262144&scope=bot%20applications.commands', {'ephemeral': true})
   }
 }
