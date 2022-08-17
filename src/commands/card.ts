@@ -52,7 +52,8 @@ const emojis = {
         'Counter': '<:YGOCounter:1000239812504191086>',
         'Field': '<:YGOField:1000239822729908374>',
         'Quick-Play': '<:YGOQuickPlay:1000239834406846544>',
-        'Ritual': '<:YGORitual:1000239836017475614>'
+        'Ritual': '<:YGORitual:1000239836017475614>',
+        'Equip': '<:YGOEquip:1000239820746006538>'
     },
     'level': {
         // Level or Rank
