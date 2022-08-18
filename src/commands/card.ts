@@ -1,7 +1,8 @@
 import { SlashCommand, CommandOptionType, ComponentType, TextInputStyle, CommandContext, AutocompleteContext, MessageEmbedOptions, EmbedField } from 'slash-create';
 import { getCardNameForId, getIdForCardName, getFuzzySearch } from '../utilities/database-cache.js';
-import { searchYPDByName, LinkMarker, Card as YPDCard } from '../utilities/ygoprodeck.js'
-import { searchDLMByName, searchMDMByName, Card as DLMCard } from '../utilities/duellinksmeta.js';
+import { searchYPDByName, searchYPDByID, LinkMarker, Card as YPDCard } from '../utilities/ygoprodeck.js'
+import { searchDLMByName, searchMDMByName, searchDLMByID, searchMDMByID, Card as DLMCard } from '../utilities/duellinksmeta.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 
 const emojis = {
     'type': {
@@ -135,6 +136,18 @@ export class CardCommand extends SlashCommand {
             description: 'Searches for a specific Yu-Gi-Oh! card by name or card ID.',
             options: [{
                 type: CommandOptionType.STRING,
+                name: 'format',
+                description: 'The Yu-Gi-Oh format you want information for.',
+                required: true,
+                choices: [{
+                    name: 'OCG/TCG',
+                    value: 'ocgtcg'
+                }, {
+                    name: 'Rush',
+                    value: 'rush'
+                }]
+            }, {
+                type: CommandOptionType.STRING,
                 name: 'query',
                 description: 'The card name or ID you want to search for.',
                 required: true,
@@ -145,25 +158,77 @@ export class CardCommand extends SlashCommand {
     }
 
     async autocomplete(ctx: AutocompleteContext): Promise<any> {
-        var choices = getFuzzySearch(ctx.options[ctx.focused])
-        return choices.map(choice => ({name: choice, value: choice})).slice(0, 15)
+        let choices: string[];
+        if (!ctx.options.format || ctx.options.format === 'ocgtcg') {
+            choices = getFuzzySearch(ctx.options[ctx.focused], 'ocgtcg')
+        } else {
+            choices = getFuzzySearch(ctx.options[ctx.focused], 'rush')
+        }
+        return choices.map(choice => ({name: (choice.endsWith(' (Rush)') ? choice.replace(' (Rush)', '') : choice), value: choice})).slice(0, 15)
     }
 
     async run(ctx: CommandContext) {
-        var cardinfo = await searchYPDByName(ctx.options.query)
-        var dlcard = await searchDLMByName(ctx.options.query)
-        var mdcard = await searchMDMByName(ctx.options.query)
+        let cardinfo: YPDCard | undefined;
+        let dlcard: DLMCard | undefined;
+        let mdcard: DLMCard | undefined;
+        if (!isNaN(Number(ctx.options.query))) {
+            if (!ctx.options.format || ctx.options.format === 'ocgtcg') {
+                cardinfo = await searchYPDByID(Number(ctx.options.query));
+                dlcard = await searchDLMByID(Number(ctx.options.query));
+                mdcard = await searchMDMByID(Number(ctx.options.query));
+            } else {
+                cardinfo = await searchYPDByID(Number(ctx.options.query), 'rush');
+                dlcard = undefined;
+                mdcard = undefined;
+            }
+        } else {
+            if (!ctx.options.format || ctx.options.format === 'ocgtcg') {
+                cardinfo = await searchYPDByName(ctx.options.query)
+                dlcard = await searchDLMByName(ctx.options.query)
+                mdcard = await searchMDMByName(ctx.options.query)
+            } else {
+                cardinfo = await searchYPDByName((ctx.options.query.endsWith(' (Rush)') ? ctx.options.query.replace(' (Rush)', ' (Rush Duel)') : ctx.options.query), 'rush');
+                dlcard = undefined;
+                mdcard = undefined;
+            }
+        }
 
         if (cardinfo === undefined) {
             // do something, exit
-            return ctx.send('The card you searched for turned up as undefined. Please try again.')
+            return ctx.send('The card you searched for turned up as undefined in our search.\nUsually, this happens when YGOPRODeck doesn\'t have information on a card we list.\nIf you suspect it\'s something else, please try again.', {ephemeral: true})
         }
 
-        let embedfields: Array<EmbedField> = [{
-            name: 'Description',
-            value: cardinfo.desc,
-            inline: false
-        }]
+        let embedfields: Array<EmbedField> = [];
+
+        if (!ctx.options.format || ctx.options.format === 'ocgtcg' || ctx.options.format === 'rush' && !cardinfo.desc.includes('[REQUIREMENT]')) {
+            if (!cardinfo.type.includes('Pendulum')) {
+                embedfields.push({
+                    name: 'Description',
+                    value: cardinfo.desc,
+                    inline: false
+                })
+            } else {
+                var inconsistent = (cardinfo.desc.includes('----------------------------------------') ? cardinfo.desc.replace('----------------------------------------', '') : cardinfo.desc)
+                var pendeffect = inconsistent.split('[ Pendulum Effect ]')[1].split('[')[0]
+                var monstereffect = inconsistent.split('[ Monster Effect ]')[1]
+                embedfields.push({name: 'Pendulum Effect', value: pendeffect, inline: false})
+                embedfields.push({name: 'Monster Effect', value: monstereffect, inline: false})
+            }
+        }
+
+        if (ctx.options.format === 'rush' && cardinfo.desc.includes('[REQUIREMENT]')) {
+            var fuckypd = cardinfo.desc.replace(/[:;]+(?!\ )/g, '')
+            var requirement = fuckypd.split('[REQUIREMENT]')[1].split('[')[0]
+            embedfields.push({name: 'Requirement', value: requirement})
+            if (fuckypd.includes('[EFFECT]')) {
+                var effect = fuckypd.split('[EFFECT]')[1]
+                embedfields.push({name: 'Effect', value: effect})
+            }
+            if (fuckypd.includes('[MULTI-CHOICE EFFECT]')) {
+                var effect = fuckypd.split('[MULTI-CHOICE EFFECT]')[1]
+                embedfields.push({name: 'Possible Effects', value: effect})
+            }
+        }
 
         let embedcolor = 0x000000;
         let leveltext: string = '';
@@ -202,7 +267,7 @@ export class CardCommand extends SlashCommand {
 
                 const rowstext = rows.map(row => row.map(e => typeof e === 'number'
                     ? emojis.number[String(e) as keyof typeof emojis.number]
-                    : emojis.arrow[String(cardinfo.linkmarkers?.includes(e) ?? false) as keyof typeof emojis.arrow][e]).join(''))
+                    : emojis.arrow[String(cardinfo!.linkmarkers?.includes(e) ?? false) as keyof typeof emojis.arrow][e]).join(''))
                     .join('\n');
 
                 embedfields.push({name: 'Link Arrows', value: rowstext, inline: true})
@@ -220,7 +285,7 @@ export class CardCommand extends SlashCommand {
             }
         }
 
-        if (dlcard && dlcard.rarity || mdcard && mdcard.rarity) {
+        if (dlcard && dlcard.rarity && ctx.options.format !== 'rush' || mdcard && mdcard.rarity && ctx.options.format !== 'rush') {
             let dltext = '';
             let mdtext = '';
             
@@ -314,15 +379,15 @@ export class CardCommand extends SlashCommand {
 
         var embed: MessageEmbedOptions = {
             footer: {
-                text: 'ID: ' + cardinfo.id
+                text: ((!ctx.options.format || ctx.options.format === 'ocgtcg') ? 'ID: ' + cardinfo.id : 'Rush ID: ' + cardinfo.id)
             },
             title: cardinfo.name,
-            url: 'https://ygoprodeck.com/card/?search=' + encodeURIComponent(cardinfo.name),
+            url: 'https://ygoprodeck.com/card/?search=' + encodeURIComponent(cardinfo.id),
             color: embedcolor,
             thumbnail: {
-                url: 'https://images.ygoprodeck.com/images/cards_cropped/' + cardinfo.id + '.jpg'
+                url: ((!ctx.options.format || ctx.options.format === 'ocgtcg') ? 'https://images.ygoprodeck.com/images/cards_cropped/' + cardinfo.id + '.jpg' : 'https://images.ygoprodeck.com/images/cards/' + cardinfo.id + '.jpg')
             },
-            description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + emojis.race[cardinfo.race as keyof typeof emojis.race] + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : ''),
+            description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + (emojis.race[cardinfo.race as keyof typeof emojis.race] ?? '') + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : ''),
             fields: embedfields
         }
         return ctx.send({embeds: [embed]})

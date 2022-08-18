@@ -52,7 +52,21 @@ export interface Response {
     data: Card[];
 }
 
-export async function searchYPDByName(name: string): Promise<Card> {
-    var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' + encodeURIComponent(name)).then(e => e.json()) as Response;
-    return response.data[0];
+export async function searchYPDByName(name: string, format?: 'ocgtcg' | 'rush'): Promise<Card | undefined> {
+    if (!format || format === 'ocgtcg') {
+        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' + encodeURIComponent(name)).then(e => e.json()) as Response;
+    } else {
+        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?format=rush%20duel&name=' + encodeURIComponent(name)).then(e => e.json()) as Response;
+    }
+    return (response.data ? response.data[0] : undefined);
+}
+
+export async function searchYPDByID(id: number, format?: 'ocgtcg' | 'rush'): Promise<Card | undefined> {
+    if (!format || format === 'ocgtcg') {
+        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?id=' + encodeURIComponent(id)).then(e => e.json()) as Response;
+    } else {
+        console.log('ID to be searched: ' + id)
+        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?format=rush%20duel&id=' + encodeURIComponent(id)).then(e => e.json()) as Response;
+    }
+    return (response.data ? response.data[0] : undefined);
 }

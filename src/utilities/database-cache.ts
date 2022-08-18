@@ -160,6 +160,12 @@ async function updateIgnisDatabase(): Promise<Card[]> {
     return await loadDatabase(path.join(__dirname, 'cards.cdb'));
 }
 
+async function updateIgnisRushDatabase(): Promise<Card[]> {
+    console.log('Downloading cards-rush.cdb...')
+    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards-rush.cdb', path.join(__dirname, 'cards.cdb'));
+    return await loadDatabase(path.join(__dirname, 'cards.cdb'));
+}
+
 async function updateOmegaDatabase(): Promise<Card[]> {
     console.log('Downloading OmegaDB.cdb...')
     await downloadFile('https://duelistsunite.org/omega/OmegaDB.cdb', path.join(__dirname, 'OmegaDB.cdb'));
@@ -169,53 +175,95 @@ async function updateOmegaDatabase(): Promise<Card[]> {
 let ignisCards = await updateIgnisDatabase();
 console.log('Initial boot download of cards.cdb complete.');
 
+let ignisRushCards = await updateIgnisRushDatabase();
+console.log('Initial boot download of cards-rush.cdb complete.');
+
 let omegaCards = await updateOmegaDatabase();
 console.log('Initial boot download of OmegaDB.cdb complete.');
 
 let ignisCardsByName = new Map<string, Card>(ignisCards.map(e => [e.name, e]));
 let ignisCardsById = new Map<number, Card>(ignisCards.map(e => [e.id, e]));
+let ignisRushCardsByName = new Map<string, Card>(ignisRushCards.map(e => [e.name, e]));
+let ignisRushCardsById = new Map<number, Card>(ignisRushCards.map(e => [e.id, e]));
 let omegaCardsByName = new Map<string, Card>(omegaCards.map(e => [e.name, e]));
 let omegaCardsById = new Map<number, Card>(omegaCards.map(e => [e.id, e]));
+let omegaRushCardsByName = new Map<string, Card>(omegaCards.filter(e => e.isRushCard).map(e => [e.name, e]))
+let omegaRushCardsById = new Map<number, Card>(omegaCards.filter(e => e.isRushCard).map(e => [e.id, e]))
 
 interval(async () => {
     ignisCards = await updateIgnisDatabase();
+    ignisRushCards = await updateIgnisRushDatabase();
     omegaCards = await updateOmegaDatabase();
 
     ignisCardsByName = new Map<string, Card>(ignisCards.map(e => [e.name, e]));
     omegaCardsByName = new Map<string, Card>(omegaCards.map(e => [e.name, e]));
+    ignisRushCardsByName = new Map<string, Card>(ignisRushCards.map(e => [e.name, e]));
+    omegaRushCardsByName = new Map<string, Card>(omegaCards.filter(e => e.isRushCard).map(e => [e.name, e]))
     ignisCardsById = new Map<number, Card>(ignisCards.map(e => [e.id, e]));
     omegaCardsById = new Map<number, Card>(omegaCards.map(e => [e.id, e]));
+    ignisRushCardsById = new Map<number, Card>(ignisRushCards.map(e => [e.id, e]));
+    omegaRushCardsById = new Map<number, Card>(omegaCards.filter(e => e.isRushCard).map(e => [e.id, e]))
 
     console.log('6hr interval download of card databases complete.');
 }, 21600000)
 
-export function getCardNameForId(id: number, db?: 'ignis' | 'omega' | 'both'): string {
-    if (!db || db === 'both') {
-        return ignisCardsById.get(id)?.name ?? omegaCardsById.get(id)!.name;
-    } else if (db === 'ignis') {
-        return ignisCardsById.get(id)!.name;
+export function getCardNameForId(id: number, db?: 'ignis' | 'omega' | 'both', format?: 'ocgtcg' | 'rush'): string {
+    if (!format || format === 'ocgtcg') {
+        if (!db || db === 'both') {
+            return ignisCardsById.get(id)?.name ?? omegaCardsById.get(id)!.name;
+        } else if (db === 'ignis') {
+            return ignisCardsById.get(id)!.name;
+        } else {
+            return omegaCardsById.get(id)!.name;
+        }
     } else {
-        return omegaCardsById.get(id)!.name;
+        if (!db || db === 'both') {
+            return ignisRushCardsById.get(id)?.name ?? omegaRushCardsById.get(id)!.name;
+        } else if (db === 'ignis') {
+            return ignisRushCardsById.get(id)!.name;
+        } else {
+            return omegaRushCardsById.get(id)!.name;
+        }
     }
 }
 
-export function getIdForCardName(name: string, db?: 'ignis' | 'omega' | 'both'): number {
-    if (!db || db === 'both') {
-        return ignisCardsByName.get(name)?.id ?? omegaCardsByName.get(name)!.id;
-    } else if (db === 'ignis') {
-        return ignisCardsByName.get(name)!.id;
+export function getIdForCardName(name: string, db?: 'ignis' | 'omega' | 'both', format?: 'ocgtcg' | 'rush'): number {
+    if (!format || format === 'ocgtcg') {
+        if (!db || db === 'both') {
+            return ignisCardsByName.get(name)?.id ?? omegaCardsByName.get(name)!.id;
+        } else if (db === 'ignis') {
+            return ignisCardsByName.get(name)!.id;
+        } else {
+            return omegaCardsByName.get(name)!.id;
+        }
     } else {
-        return omegaCardsByName.get(name)!.id;
+        if (!db || db === 'both') {
+            return ignisRushCardsByName.get(name)?.id ?? omegaRushCardsByName.get(name)!.id;
+        } else if (db === 'ignis') {
+            return ignisRushCardsByName.get(name)!.id;
+        } else {
+            return omegaRushCardsByName.get(name)!.id;
+        }
     }
 }
 
-export function getTypeForId(id: number, db?: 'ignis' | 'omega' | 'both'): Array<keyof typeof types> {
-    if (!db || db === 'both') {
-        return ignisCardsById.get(id)?.typeFlags ?? omegaCardsById.get(id)!.typeFlags;
-    } else if (db === 'ignis') {
-        return ignisCardsById.get(id)!.typeFlags;
+export function getTypeForId(id: number, db?: 'ignis' | 'omega' | 'both', format?: 'ocgtcg' | 'rush'): Array<keyof typeof types> {
+    if (!format || format === 'ocgtcg') {
+        if (!db || db === 'both') {
+            return ignisCardsById.get(id)?.typeFlags ?? omegaCardsById.get(id)!.typeFlags;
+        } else if (db === 'ignis') {
+            return ignisCardsById.get(id)!.typeFlags;
+        } else {
+            return omegaCardsById.get(id)!.typeFlags;
+        }
     } else {
-        return omegaCardsById.get(id)!.typeFlags;
+        if (!db || db === 'both') {
+            return ignisRushCardsById.get(id)?.typeFlags ?? omegaRushCardsById.get(id)!.typeFlags;
+        } else if (db === 'ignis') {
+            return ignisRushCardsById.get(id)!.typeFlags;
+        } else {
+            return omegaRushCardsById.get(id)!.typeFlags;
+        }
     }
 }
 
@@ -231,12 +279,35 @@ const fuse = new Fuse([...new Set([
     includeScore: true,
 });
 
-export function getFuzzySearch(input: string | number): string[] {
-    const results = fuse.search(String(input), {limit: 100});
+const fuserush = new Fuse([...new Set([
+    ...ignisRushCards.map(e => e.name),
+    ...ignisRushCards.map(e => String(e.id))
+]).keys()], {
+    isCaseSensitive: false,
+    shouldSort: true,
+    includeScore: true,
+});
+
+export function getFuzzySearch(input: string | number, format: 'ocgtcg' | 'rush'): string[] {
+    let results: Fuse.FuseResult<string>[];
+    if (format === 'ocgtcg') {
+        results = fuse.search(String(input), {limit: 100});
+    } else {
+        results = fuserush.search(String(input), {limit: 100});
+    }
+    
     const output = results
         .map(match => { // make a map out of that bitch
             if (!isNaN(Number(match.item))) { // if the result is a number (that is, a card ID), parse it into the full card name
-                const card = ignisCardsById.get(Number(match.item)) ?? omegaCardsById.get(Number(match.item));
+                let card: Card | undefined;
+                switch (format) {
+                    case 'ocgtcg':
+                        card = ignisCardsById.get(Number(match.item)) ?? omegaCardsById.get(Number(match.item));
+                        break;
+                    case 'rush':
+                        card = ignisRushCardsById.get(Number(match.item)) ?? omegaRushCardsById.get(Number(match.item));
+                        break;
+                };
                 if (!card) return undefined; // if the card isn't anything at all, throw a fit about it (it gets removed from the array later)
                 return { // if it is anything, sweet; return an object about it
                     item: card.name,
