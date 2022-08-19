@@ -5,7 +5,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 export class VoteCommand extends SlashCommand {
   constructor(creator: any) {
     super(creator, {
-      name: 'vote',
+      name: 'v',
       description: 'Provides a link to vote for Junk Converter on Top.gg.',
       deferEphemeral: true
     });

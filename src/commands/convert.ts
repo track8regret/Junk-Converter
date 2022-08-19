@@ -18,7 +18,7 @@ function sendModalAndGetValues(ctx: ModalSendableContext, options: ModalOptions)
 export class ConvertCommand extends SlashCommand {
     constructor(creator: any) {
         super(creator, {
-            name: 'convert',
+            name: 'c',
             description: 'Converts a Yu-Gi-Oh deck from one format to another.',
             options: [{
                 type: CommandOptionType.STRING,
