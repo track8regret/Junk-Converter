@@ -1,16 +1,16 @@
 import { SlashCommand, CommandOptionType, CommandContext, AutocompleteContext } from 'slash-create';
-import { getFuzzyCardSearch } from '../utilities/database-cache.js';
-import { searchCard } from '../utilities/searchutil.js';
+import { getFuzzySetSearch } from '../utilities/duellinksmeta.js';
+import { searchSet } from '../utilities/searchutil.js';
 
-export class SearchCommand extends SlashCommand {
+export class MasterDuelSetCommand extends SlashCommand {
     constructor(creator: any) {
         super(creator, {
-            name: 's',
-            description: 'Searches for a specific Yu-Gi-Oh! card by name or card ID.',
+            name: 'mds',
+            description: 'Searches for a specific Yu-Gi-Oh! Master Duel card set by name.',
             options: [{
                 type: CommandOptionType.STRING,
                 name: 'query',
-                description: 'The card name or ID you want to search for.',
+                description: 'The set name you want to search for.',
                 required: true,
                 autocomplete: true
             }],
@@ -20,11 +20,11 @@ export class SearchCommand extends SlashCommand {
 
     async autocomplete(ctx: AutocompleteContext): Promise<any> {
         let choices: string[];
-        choices = getFuzzyCardSearch(ctx.options[ctx.focused], 'ocgtcg')
+        choices = getFuzzySetSearch(ctx.options[ctx.focused], 'md')
         return choices.map(choice => ({name: choice, value: choice})).slice(0, 15)
     }
 
     async run(ctx: CommandContext) {
-        return await searchCard(ctx.options.query, ctx)
+        return await searchSet(ctx.options.query, ctx, 'md')
     }
 }

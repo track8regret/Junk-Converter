@@ -9,6 +9,8 @@ import { InviteCommand } from './commands/invite.js';
 import { VoteCommand } from './commands/vote.js';
 import { SearchCommand } from './commands/search.js'
 import { SearchRushCommand } from './commands/searchrush.js';
+import { DuelLinksSetCommand } from './commands/duellinksset.js';
+import { MasterDuelSetCommand } from './commands/masterduelset.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -29,7 +31,7 @@ await creator
         (handler) => client.ws.on('INTERACTION_CREATE', handler)
     )
     )
-    .registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand])
+    .registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand, DuelLinksSetCommand, MasterDuelSetCommand])
     .on('commandError', (command, error) => console.error(`Command ${command.commandName}:`, error))
     .syncCommands()
     .syncCommandsIn('299680357840715786')
@@ -37,7 +39,7 @@ await creator
 client.login(token);
 client.on('ready', () => {
     console.log('Junk Converter online.')
-    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Mikanko OTK', 'type': 'PLAYING'}]})
+    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Adventurer... Anything, Really', 'type': 'PLAYING'}]})
 });
 
 ap.on('posted', () => {

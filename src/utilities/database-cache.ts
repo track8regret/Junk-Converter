@@ -2,7 +2,6 @@ import fetch from 'node-fetch';
 import sqlite from 'sqlite3';
 import interval from 'interval-promise';
 import fs from 'fs';
-import fsPromise from 'fs/promises';
 import path from 'path';
 import url from 'url';
 import { default as Fuse } from 'fuse.js'
@@ -65,14 +64,16 @@ export class Card {
      * @param id The card ID
      * @param ot 
      * @param alias The card this card derives from, if any (else 0)
-     * @param setcode The archetype the card belongs to
+     * @param setcode The archetype the card belongs to, if any (else 0)
      * @param type The bitflags for the card's types
      * @param atk The card's ATK, if applicable (else 0)
      * @param def The card's DEF, if applicable (else 0)
      * @param level The card's Level, if applicable (else 0)
      * @param race The card's Type, if applicable (else 0)
      * @param attribute The card's Attribute, if applicable (else 0)
-     * @param category The card's... something. We're not really sure yet
+     * @param category The card's... something. We're not really sure yet.
+     * @param database The database the card originates from (EDOPro or YGO Omega)
+     * @param format The game format the card originates from (OCG/TCG or Rush)
      * @param name The card's display name in English
      * @param desc The card's description in English
      */
@@ -88,6 +89,8 @@ export class Card {
         public readonly race: number,
         public readonly attribute: number,
         public readonly category: number,
+        public readonly database: 'Ignis' | 'Omega',
+        public readonly format: 'OCG/TCG' | 'Rush' | undefined,
 
         public readonly name: string,
         public readonly desc: string,
@@ -96,11 +99,25 @@ export class Card {
     }
 
     get isOCGorTCGCard() {
-        return this.ot < 4;
+        switch (this.database) {
+            case 'Ignis':
+                return this.format === 'OCG/TCG';
+                break;
+            case 'Omega':
+                return this.ot < 4;
+                break;
+        }
     }
 
     get isRushCard() {
-        return this.ot == 4 && this.alias == 120000000
+        switch (this.database) {
+            case 'Ignis':
+                return this.format === 'Rush';
+                break;
+            case 'Omega':
+                return this.ot == 4 && this.alias == 120000000
+                break;
+        }
     }
 
     get isSkillCard() {
@@ -133,6 +150,12 @@ function loadDatabase(dbPath: string): Promise<Card[]> {
             `, (err, rows) => {
                 if (err) reject(err);
 
+                let format: Card["format"];
+                let database: Card["database"];
+                if (dbPath.endsWith('cards.cdb')) format = 'OCG/TCG', database = 'Ignis';
+                if (dbPath.endsWith('cards-rush.cdb')) format = 'Rush', database = 'Ignis';
+                if (dbPath.endsWith('OmegaDB.cdb')) format = undefined, database = 'Omega';
+
                 resolve(rows.map(row => new Card(
                     row.id,
                     row.ot,
@@ -145,6 +168,8 @@ function loadDatabase(dbPath: string): Promise<Card[]> {
                     row.race,
                     row.attribute,
                     row.category,
+                    database,
+                    format,
                     row.name,
                     row.desc,
                 )));
@@ -162,8 +187,8 @@ async function updateIgnisDatabase(): Promise<Card[]> {
 
 async function updateIgnisRushDatabase(): Promise<Card[]> {
     console.log('Downloading cards-rush.cdb...')
-    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards-rush.cdb', path.join(__dirname, 'cards.cdb'));
-    return await loadDatabase(path.join(__dirname, 'cards.cdb'));
+    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards-rush.cdb', path.join(__dirname, 'cards-rush.cdb'));
+    return await loadDatabase(path.join(__dirname, 'cards-rush.cdb'));
 }
 
 async function updateOmegaDatabase(): Promise<Card[]> {
@@ -288,7 +313,7 @@ const fuserush = new Fuse([...new Set([
     includeScore: true,
 });
 
-export function getFuzzySearch(input: string | number, format: 'ocgtcg' | 'rush'): string[] {
+export function getFuzzyCardSearch(input: string | number, format: 'ocgtcg' | 'rush'): string[] {
     let results: Fuse.FuseResult<string>[];
     if (format === 'ocgtcg') {
         results = fuse.search(String(input), {limit: 100});

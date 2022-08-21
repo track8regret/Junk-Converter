@@ -1,5 +1,5 @@
 import { SlashCommand, CommandOptionType, CommandContext, AutocompleteContext } from 'slash-create';
-import { getFuzzySearch } from '../utilities/database-cache.js';
+import { getFuzzyCardSearch } from '../utilities/database-cache.js';
 import { searchCard } from '../utilities/searchutil.js';
 
 export class SearchRushCommand extends SlashCommand {
@@ -20,7 +20,7 @@ export class SearchRushCommand extends SlashCommand {
 
     async autocomplete(ctx: AutocompleteContext): Promise<any> {
         let choices: string[];
-        choices = getFuzzySearch(ctx.options[ctx.focused], 'rush')
+        choices = getFuzzyCardSearch(ctx.options[ctx.focused], 'rush')
         return choices.map(choice => ({name: (choice.endsWith(' (Rush)') ? choice.replace(' (Rush)', '') : choice), value: choice})).slice(0, 15)
     }
 

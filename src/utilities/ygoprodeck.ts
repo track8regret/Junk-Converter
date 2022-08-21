@@ -52,21 +52,26 @@ export interface Response {
     data: Card[];
 }
 
-export async function searchYPDByName(name: string, format?: 'ocgtcg' | 'rush'): Promise<Card | undefined> {
-    if (!format || format === 'ocgtcg') {
-        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' + encodeURIComponent(name)).then(e => e.json()) as Response;
-    } else {
-        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?format=rush%20duel&name=' + encodeURIComponent(name)).then(e => e.json()) as Response;
-    }
-    return (response.data ? response.data[0] : undefined);
-}
+export class YGOPRODeck {
+    protected baseURL: string = 'https://db.ygoprodeck.com/api/v7';
 
-export async function searchYPDByID(id: number, format?: 'ocgtcg' | 'rush'): Promise<Card | undefined> {
-    if (!format || format === 'ocgtcg') {
-        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?id=' + encodeURIComponent(id)).then(e => e.json()) as Response;
-    } else {
-        console.log('ID to be searched: ' + id)
-        var response: Response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?format=rush%20duel&id=' + encodeURIComponent(id)).then(e => e.json()) as Response;
+    constructor() {}
+
+    async searchCard (input: string | number, format?: 'ocgtcg' | 'rush'): Promise<Card | undefined> {
+        let searchtype: '?id=' | '?name=';
+        let response: Response;
+        !isNaN(Number(input)) ? searchtype = '?id=' : searchtype = '?name='
+        switch (format) {
+            default:
+                response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input)).then(e => e.json()) as Response;
+                break;
+            case 'ocgtcg':
+                response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input)).then(e => e.json()) as Response;
+                break;
+            case 'rush':
+                response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input) + '&format=rush%20duel').then(e => e.json()) as Response;
+                break;
+        }
+        return (response.data ? response.data[0] : undefined)
     }
-    return (response.data ? response.data[0] : undefined);
 }
