@@ -12,7 +12,7 @@
   "dependencies": {
     "base64-js": "^1.5.1",
     "deflate-js": "^0.2.3",
-    "discord.js": "^13.8.1",
+    "discord.js": "^14.3.0",
     "fs": "^0.0.1-security",
     "fuse.js": "^6.6.2",
     "https": "^1.0.0",
@@ -20,7 +20,7 @@
     "jsdom": "^20.0.0",
     "node-fetch": "^3.2.6",
     "sanitize-filename": "^1.6.3",
-    "slash-create": "^5.6.1",
+    "slash-create": "^5.8.0",
     "sqlite3": "^5.0.8",
     "topgg-autoposter": "^2.0.1",
     "ydke": "^1.1.0"

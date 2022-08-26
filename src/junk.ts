@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { SlashCreator, GatewayServer } from 'slash-create';
-import { Client, Collection, Intents } from 'discord.js';
+import { ActivityType, Client, Collection, GatewayDispatchEvents, GatewayIntentBits } from 'discord.js';
 import { AutoPoster } from 'topgg-autoposter';
 import url from 'url';
 import { ConvertCommand } from './commands/convert.js';
@@ -16,7 +16,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const { appid, publickey, token, topgg } = JSON.parse(await fs.readFile(path.join(__dirname, 'config.json'), 'utf8'));
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const creator = new SlashCreator({
     applicationID: appid,
     publicKey: publickey,
@@ -28,7 +28,7 @@ const ap = AutoPoster(topgg, client)
 await creator
     .withServer(
     new GatewayServer(
-        (handler) => client.ws.on('INTERACTION_CREATE', handler)
+        (handler) => client.ws.on(GatewayDispatchEvents.InteractionCreate, handler)
     )
     )
     .registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand, DuelLinksSetCommand, MasterDuelSetCommand])
@@ -39,7 +39,7 @@ await creator
 client.login(token);
 client.on('ready', () => {
     console.log('Junk Converter online.')
-    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Adventurer... Anything, Really', 'type': 'PLAYING'}]})
+    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Adventurer... Anything, Really', 'type': ActivityType.Playing}]})
 });
 
 ap.on('posted', () => {

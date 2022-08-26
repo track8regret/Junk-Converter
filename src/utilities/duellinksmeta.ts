@@ -81,8 +81,8 @@ export class DuelLinksMeta {
     };
 
     async searchCard(input: string | number): Promise<Card> {
-        let searchtype: '?id=' | '?name=';
-        !isNaN(Number(input)) ? searchtype = '?id=' : searchtype = '?name=';
+        let searchtype: '?id=' | '?search=';
+        !isNaN(Number(input)) ? searchtype = '?id=' : searchtype = '?search=';
         var response: Card[] = await fetch(this.baseURL + '/cards' + searchtype + encodeURIComponent(input)).then(e => e.json()) as Card[];
         var noalts = response.filter(card => !card.alternateArt);
         if (noalts.every(card => card.popRank === Number.MAX_VALUE)) {

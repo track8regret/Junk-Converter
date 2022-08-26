@@ -1,7 +1,6 @@
 import { SlashCommand, CommandOptionType, ComponentType, TextInputStyle, CommandContext, ModalSendableContext, ModalOptions, MessageFile, ModalInteractionContext } from 'slash-create';
 import { Deck, Encoder, YDKEncoder, YDKeEncoder, OmegaEncoder, NamelistEncoder, KonamiEncoder, JSONEncoder } from '../utilities/encoders.js'
 import url from 'url';
-import { MessageAttachment } from 'discord.js';
 import fetch from 'node-fetch';
 import jsdom from 'jsdom';
 const { JSDOM } = jsdom;

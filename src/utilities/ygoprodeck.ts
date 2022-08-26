@@ -13,6 +13,7 @@ export interface Card {
     archetype?: string;
     scale?: number;
     card_sets?: CardSet[];
+    banlist_info?: BanlistInfo;
     linkval?: number;
     linkmarkers?: LinkMarker[];
     card_images: Artwork[];
@@ -30,6 +31,14 @@ export interface CardSet {
     set_rarity: string;
     set_rarity_code: string;
     set_price: string;
+}
+
+export type BanStatus = 'Banned' | 'Limited' | 'Semi-Limited'
+
+export interface BanlistInfo {
+    ban_tcg?: BanStatus;
+    ban_ocg?: BanStatus;
+    ban_goat?: BanStatus;
 }
 
 export type LinkMarker = 'Top' | 'Bottom' | 'Left' | 'Right' | 'Top-Left' | 'Top-Right' | 'Bottom-Left' | 'Bottom-Right';

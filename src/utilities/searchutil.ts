@@ -126,8 +126,11 @@ const emojis = {
     'lflist': {
         // Forbidden & Limited icons
         'Forbidden': '<:YGOForbidden:1001074112233484298>',
+        'Banned': '<:YGOForbidden:1001074112233484298>',
         'Limited 1': '<:YGOLimited:1001074112967483483>',
-        'Limited 2': '<:YGOSemiLimited:1001074113697292399>'
+        'Limited': '<:YGOLimited:1001074112967483483>',
+        'Limited 2': '<:YGOSemiLimited:1001074113697292399>',
+        'Semi-Limited': '<:YGOSemiLimited:1001074113697292399>'
     }
 }
 
@@ -167,6 +170,19 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
     }
 
     let embedfields: Array<EmbedField> = [];
+
+    let tradban: string = '';
+    if (cardinfo.banlist_info) {
+        if (cardinfo.banlist_info.ban_tcg) {
+            tradban += '\n**TCG Status:** ' + emojis.lflist[cardinfo.banlist_info.ban_tcg] + ' ' + cardinfo.banlist_info.ban_tcg
+        }
+        if (cardinfo.banlist_info.ban_ocg) {
+            tradban += '\n**OCG Status:** ' + emojis.lflist[cardinfo.banlist_info.ban_ocg] + ' ' + cardinfo.banlist_info.ban_ocg
+        }
+        if (cardinfo.banlist_info.ban_goat) {
+            tradban += '\n**GOAT Status:** ' + emojis.lflist[cardinfo.banlist_info.ban_goat] + ' ' + cardinfo.banlist_info.ban_goat
+        }
+    }
 
     if (!format || format === 'ocgtcg' || format === 'rush' && !cardinfo.desc.includes('[REQUIREMENT]')) {
         if (!cardinfo.type.includes('Pendulum')) {
@@ -317,7 +333,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
             for (const source of mdcard.obtain) {
                 switch (source.type) {
                     case 'sets':
-                        mdtext += '\n[' + source.source.name + '](https://www.masterduelmeta.com/articles/sets/' + encodeURIComponent(source.source.name) + ')'
+                        mdtext += '\n[' + source.source.name + '](https://www.masterduelmeta.com/articles/sets/' + encodeURIComponent(source.source.name).toLowerCase().replace(' ', '-') + ')'
                         break;
                     case 'otherSources':
                         mdtext += '\n' + source.source.name
@@ -355,7 +371,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         thumbnail: {
             url: ((!format || format === 'ocgtcg') ? 'https://images.ygoprodeck.com/images/cards_cropped/' + cardinfo.id + '.jpg' : 'https://images.ygoprodeck.com/images/cards/' + cardinfo.id + '.jpg')
         },
-        description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + (emojis.race[cardinfo.race as keyof typeof emojis.race] ?? '') + (cardinfo.type.includes('Tuner') ? emojis.race['Tuner'] : '') + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : ''),
+        description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + (emojis.race[cardinfo.race as keyof typeof emojis.race] ?? '') + (cardinfo.type.includes('Tuner') ? emojis.race['Tuner'] : '') + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : '') + ((tradban !== '') ? tradban : ''),
         fields: embedfields
     }
     return ctx.send({embeds: [embed]})
