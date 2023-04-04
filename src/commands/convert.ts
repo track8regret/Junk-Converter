@@ -75,8 +75,7 @@ export class ConvertCommand extends SlashCommand {
                 type: CommandOptionType.STRING,
                 name: 'name',
                 description: 'The name you want the deck to output with. Only relevant when converting to YDK or JSON.'
-            }],
-            deferEphemeral: true
+            }]
         });
         this.filePath = __filename;
     };

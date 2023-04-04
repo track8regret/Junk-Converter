@@ -13,8 +13,7 @@ export class SearchRushCommand extends SlashCommand {
                 description: 'The card name or ID you want to search for.',
                 required: true,
                 autocomplete: true
-            }],
-            deferEphemeral: true
+            }]
         })
     }
 

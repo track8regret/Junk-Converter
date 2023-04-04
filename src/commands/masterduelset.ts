@@ -13,8 +13,7 @@ export class MasterDuelSetCommand extends SlashCommand {
                 description: 'The set name you want to search for.',
                 required: true,
                 autocomplete: true
-            }],
-            deferEphemeral: true
+            }]
         })
     }
 
