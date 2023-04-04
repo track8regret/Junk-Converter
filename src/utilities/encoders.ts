@@ -5,7 +5,6 @@ import { promisify } from 'util';
 import b64 from 'base64-js';
 import jsdom from 'jsdom';
 import fetch from 'node-fetch';
-import sanitize from 'sanitize-filename';
 const { JSDOM } = jsdom;
 
 const deflateRaw = promisify(zlib.deflateRaw);

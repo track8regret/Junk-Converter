@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import path from 'path';
 import fs from 'fs/promises';
 import { SlashCreator, GatewayServer } from 'slash-create';
@@ -14,16 +16,16 @@ import { MasterDuelSetCommand } from './commands/masterduelset.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-const { appid, publickey, token, topgg } = JSON.parse(await fs.readFile(path.join(__dirname, 'config.json'), 'utf8'));
+const { APP_ID, PUBLIC_KEY, TOKEN, TOP_GG } = process.env;
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const creator = new SlashCreator({
-    applicationID: appid,
-    publicKey: publickey,
-    token: token,
+    applicationID: APP_ID!,
+    publicKey: PUBLIC_KEY,
+    token: TOKEN,
     client
 });
-const ap = AutoPoster(topgg, client)
+const ap = AutoPoster(TOP_GG!, client)
 
 await creator
     .withServer(
@@ -36,7 +38,7 @@ await creator
     .syncCommands()
     .syncCommandsIn('299680357840715786')
 
-client.login(token);
+client.login(TOKEN);
 client.on('ready', () => {
     console.log('Junk Converter online.')
     client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Adventurer... Anything, Really', 'type': ActivityType.Playing}]})

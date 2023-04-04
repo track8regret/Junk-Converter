@@ -181,20 +181,20 @@ function loadDatabase(dbPath: string): Promise<Card[]> {
 
 async function updateIgnisDatabase(): Promise<Card[]> {
     console.log('Downloading cards.cdb...')
-    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards.cdb', path.join(__dirname, 'cards.cdb'));
-    return await loadDatabase(path.join(__dirname, 'cards.cdb'));
+    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards.cdb', path.join(__dirname, '../databases/cards.cdb'));
+    return await loadDatabase(path.join(__dirname, '../databases/cards.cdb'));
 }
 
 async function updateIgnisRushDatabase(): Promise<Card[]> {
     console.log('Downloading cards-rush.cdb...')
-    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards-rush.cdb', path.join(__dirname, 'cards-rush.cdb'));
-    return await loadDatabase(path.join(__dirname, 'cards-rush.cdb'));
+    await downloadFile('https://github.com/ProjectIgnis/BabelCDB/raw/master/cards-rush.cdb', path.join(__dirname, '../databases/cards-rush.cdb'));
+    return await loadDatabase(path.join(__dirname, '../databases/cards-rush.cdb'));
 }
 
 async function updateOmegaDatabase(): Promise<Card[]> {
     console.log('Downloading OmegaDB.cdb...')
-    await downloadFile('https://duelistsunite.org/omega/OmegaDB.cdb', path.join(__dirname, 'OmegaDB.cdb'));
-    return await loadDatabase(path.join(__dirname, 'OmegaDB.cdb'));
+    await downloadFile('https://duelistsunite.org/omega/OmegaDB.cdb', path.join(__dirname, '../databases/OmegaDB.cdb'));
+    return await loadDatabase(path.join(__dirname, '../databases/OmegaDB.cdb'));
 }
 
 let ignisCards = await updateIgnisDatabase();
