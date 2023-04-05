@@ -166,11 +166,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
 
     if (cardinfo === undefined) {
         // do something, exit
-        if (!format || format === 'ocgtcg') {
-            return ctx.send('The card you searched for turned up as undefined in our search.\nUsually, this happens when YGOPRODeck doesn\'t have information on a card we list.\nIf you suspect it\'s something else, please try again.', {ephemeral: true})
-        } else {
-            return ctx.send('The card you searched for turned up as undefined in our search.\nUsually, this happens when YGOPRODeck doesn\'t have information on a card we list.\nIf you suspect it\'s something else, please try again.\n\nRight now, YGOPRODeck seemingly has their entire Rush Duel database gone.\nThis will either fix itself automatically when YGOPRODeck fixes it, or an update will come for Junk Converter once rushcard.io has a public API.', {ephemeral: true})
-        }
+        return ctx.send('The card you searched for turned up as undefined in our search.\nUsually, this happens when YGOPRODeck doesn\'t have information on a card we list.\nIf you suspect it\'s something else, please try again.', {ephemeral: true})
     }
 
     let embedfields: Array<EmbedField> = [];
