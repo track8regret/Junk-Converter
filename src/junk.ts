@@ -1,7 +1,5 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
-import path from 'path';
-import fs from 'fs/promises';
 import { SlashCreator, GatewayServer } from 'slash-create';
 import { ActivityType, Client, Collection, GatewayDispatchEvents, GatewayIntentBits } from 'discord.js';
 import { AutoPoster } from 'topgg-autoposter';
@@ -41,7 +39,7 @@ await creator
 client.login(TOKEN);
 client.on('ready', () => {
     console.log('Junk Converter online.')
-    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Adventurer... Anything, Really', 'type': ActivityType.Playing}]})
+    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Ishizu Tearlament', 'type': ActivityType.Playing}]})
 });
 
 ap.on('posted', () => {
