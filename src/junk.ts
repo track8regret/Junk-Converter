@@ -1,9 +1,9 @@
+// import everything we need
 import * as dotenv from 'dotenv'
 dotenv.config()
 import { SlashCreator, GatewayServer } from 'slash-create';
 import { ActivityType, Client, Collection, GatewayDispatchEvents, GatewayIntentBits } from 'discord.js';
 import { AutoPoster } from 'topgg-autoposter';
-import url from 'url';
 import { ConvertCommand } from './commands/convert.js';
 import { InviteCommand } from './commands/invite.js';
 import { VoteCommand } from './commands/vote.js';
@@ -12,10 +12,10 @@ import { SearchRushCommand } from './commands/searchrush.js';
 import { DuelLinksSetCommand } from './commands/duellinksset.js';
 import { MasterDuelSetCommand } from './commands/masterduelset.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+// grab dotenv variables
+const { APP_ID, PUBLIC_KEY, TOKEN, TOP_GG, TEST_SERVER } = process.env;
 
-const { APP_ID, PUBLIC_KEY, TOKEN, TOP_GG } = process.env;
-
+// make the client
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const creator = new SlashCreator({
     applicationID: APP_ID!,
@@ -23,6 +23,8 @@ const creator = new SlashCreator({
     token: TOKEN,
     client
 });
+
+// set up topgg autoposter
 const ap = AutoPoster(TOP_GG!, client)
 
 await creator
@@ -31,10 +33,10 @@ await creator
         (handler) => client.ws.on(GatewayDispatchEvents.InteractionCreate, handler)
     )
     )
-    .registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand, DuelLinksSetCommand, MasterDuelSetCommand])
+    .registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand, DuelLinksSetCommand, MasterDuelSetCommand]) // register commands
     .on('commandError', (command, error) => console.error(`Command ${command.commandName}:`, error))
     .syncCommands()
-    .syncCommandsIn('299680357840715786')
+    .syncCommandsIn(TEST_SERVER!)
 
 client.login(TOKEN);
 client.on('ready', () => {
