@@ -1,0 +1,350 @@
+{
+    "server": {
+        "type": {
+            "Spell Card": "<:YGOSpell:1000239838357897267>",
+            "Trap Card": "<:YGOTrap:1000239840777998366>"
+        },
+        "attribute": {
+            "FIRE": "<:YGOFire:1000239826093744229>",
+            "WATER": "<:YGOWater:1000239842384412792>",
+            "EARTH": "<:YGOEarth:1000239819856822315>",
+            "WIND": "<:YGOWind:1000239843256827934>",
+            "LIGHT": "<:YGOLight:1000239829054914571>",
+            "DARK": "<:YGODark:1000239815201140776>",
+            "DIVINE": "<:YGODivine:1000239816891445358>"
+        },
+        "race": {
+            "Aqua": "<:YGOAqua:1000239808729329694>",
+            "Beast": "<:YGOBeast:1000239809694027796>",
+            "Beast-Warrior": "<:YGOBeastWarrior:1000239810411233340>",
+            "Creator-God": "<:YGOCreatorGod:1000239813217243227>",
+            "Cyberse": "<:YGOCyberse:1000239814232248460>",
+            "Dinosaur": "<:YGODinosaur:1000239816157429830>",
+            "Divine-Beast": "<:YGODivineBeast:1000239817650618428>",
+            "Dragon": "<:YGODragon:1000239818657243246>",
+            "Fairy": "<:YGOFairy:1000239821530345522>",
+            "Fiend": "<:YGOFiend:1000239825229713478>",
+            "Fish": "<:YGOFish:1000239826689331222>",
+            "Insect": "<:YGOInsect:1000239827947634859>",
+            "Machine": "<:YGOMachine:1000239830191587348>",
+            "Plant": "<:YGOPlant:1000239832213242037>",
+            "Psychic": "<:YGOPsychic:1000239832917889034>",
+            "Pyro": "<:YGOPyro:1000239833664462899>",
+            "Reptile": "<:YGOReptile:1000239835203764344>",
+            "Rock": "<:YGORock:1000239836508196985>",
+            "Sea Serpent": "<:YGOSeaSerpent:1000239837640667266>",
+            "Spellcaster": "<:YGOSpellcaster:1000239839075123240>",
+            "Thunder": "<:YGOThunder:1000239839905587282>",
+            "Warrior": "<:YGOWarrior:1000239841574924382>",
+            "Winged Beast": "<:YGOWingedBeast:1000239843772743801>",
+            "Wyrm": "<:YGOWyrm:1000239844896817173>",
+            "Zombie": "<:YGOZombie:1000239845806981120>",
+
+            "Normal": "<:YGONormal:1000239830929784943>",
+            "Continuous": "<:YGOContinuous:1000239811245920416>",
+            "Counter": "<:YGOCounter:1000239812504191086>",
+            "Field": "<:YGOField:1000239822729908374>",
+            "Quick-Play": "<:YGOQuickPlay:1000239834406846544>",
+            "Ritual": "<:YGORitual:1000239836017475614>",
+            "Equip": "<:YGOEquip:1000239820746006538>",
+
+            "Tuner": "<:YGOTuner:1010457769444376607>"
+        },
+        "level": {
+            "level": "<:YGOLevel:1000248438291701931>",
+            "rank": "<:YGORank:1000248438950219909>",
+            "link": "<:YGOLink:1001077307609448479>"
+        }, 
+        "scale": {
+            "left": "<:YGOPendulumL:1000263798264971274>",
+            "right": "<:YGOPendulumR:1000263799183523900>"
+        },
+        "arrow": {
+            "true": {
+                "Top": "<:YGOLinkU:1000269959835947059>",
+                "Bottom": "<:YGOLinkD:1000269956098838538>",
+                "Left": "<:YGOLinkL:1000269958267281478>",
+                "Right": "<:YGOLinkR:1000269958963527771>",
+                "Top-Left": "<:YGOLinkUL:1000269960758702160>",
+                "Top-Right": "<:YGOLinkUR:1000269961530454066>",
+                "Bottom-Left": "<:YGOLinkDL:1000269956816048250>",
+                "Bottom-Right": "<:YGOLinkDR:1000269957562646569>"
+            },
+            "false": {
+                "Top": "<:YGOLinkNU:1000274112557629450>",
+                "Bottom": "<:YGOLinkND:1000274108703051846>",
+                "Left": "<:YGOLinkNL:1000274111110578319>",
+                "Right": "<:YGOLinkNR:1000274111865569400>",
+                "Top-Left": "<:YGOLinkNUL:1000274113551683675>",
+                "Top-Right": "<:YGOLinkNUR:1000274114365378611>",
+                "Bottom-Left": "<:YGOLinkNDL:1000274109680324689>",
+                "Bottom-Right": "<:YGOLinkNDR:1000274110426918942>"
+            }
+        },
+        "rarity": {
+            "DL": {
+                "N": "<:YGODLN:1001018080610242591>",
+                "R": "<:YGODLR:1001018081834971207>",
+                "SR": "<:YGODLSR:1001018082703192105>",
+                "UR": "<:YGODLUR:1001018083491721336>"
+            },
+            "MD": {
+                "N": "<:YGOMDN:1001017002950926386>",
+                "R": "<:YGOMDR:1001017020843827251>",
+                "SR": "<:YGOMDSR:1001017035184148542>",
+                "UR": "<:YGOMDUR:1001017050371727441>"
+            }
+        },
+        "number": {
+            "0": ":zero:",
+            "1": ":one:",
+            "2": ":two:",
+            "3": ":three:",
+            "4": ":four:",
+            "5": ":five:",
+            "6": ":six:",
+            "7": ":seven:",
+            "8": ":eight:"
+        },
+        "lflist": {
+            "Forbidden": "<:YGOForbidden:1001074112233484298>",
+            "Banned": "<:YGOForbidden:1001074112233484298>",
+            "Limited 1": "<:YGOLimited:1001074112967483483>",
+            "Limited": "<:YGOLimited:1001074112967483483>",
+            "Limited 2": "<:YGOSemiLimited:1001074113697292399>",
+            "Semi-Limited": "<:YGOSemiLimited:1001074113697292399>"
+        }
+    },
+    "junk": {
+        "type": {
+            "Spell Card": "<:YGOSpell:1285910668159094856>",
+            "Trap Card": "<:YGOTrap:1285910701050822759>"
+        },
+        "attribute": {
+            "FIRE": "<:YGOFire:1285910264964710411>",
+            "WATER": "<:YGOWater:1285910731442884641>",
+            "EARTH": "<:YGOEarth:1285910197411254383>",
+            "WIND": "<:YGOWind:1285910743451041802>",
+            "LIGHT": "<:YGOLight:1285910315644616724>",
+            "DARK": "<:YGODark:1285910081807843328>",
+            "DIVINE": "<:YGODivine:1285910107825373184>"
+        },
+        "race": {
+            "Aqua": "<:YGOAqua:1285910006826405923>",
+            "Beast": "<:YGOBeast:1285910020747169825>",
+            "Beast-Warrior": "<:YGOBeastWarrior:1285910030406651955>",
+            "Creator-God": "<:YGOCreatorGod:1285910062337884255>",
+            "Cyberse": "<:YGOCyberse:1285910071183933481>",
+            "Dinosaur": "<:YGODinosaur:1285910092624957522>",
+            "Divine-Beast": "<:YGODivineBeast:1285910119548321833>",
+            "Dragon": "<:YGODragon:1285910187542183977>",
+            "Fairy": "<:YGOFairy:1285910217057636354>",
+            "Fiend": "<:YGOFiend:1285910254613303342>",
+            "Fish": "<:YGOFish:1285910274301497356>",
+            "Insect": "<:YGOInsect:1285910295084269589>",
+            "Machine": "<:YGOMachine:1285910519609294949>",
+            "Plant": "<:YGOPlant:1285910564975153183>",
+            "Psychic": "<:YGOPsychic:1285910575288680498>",
+            "Pyro": "<:YGOPyro:1285910585741148202>",
+            "Reptile": "<:YGOReptile:1285910616477012069>",
+            "Rock": "<:YGORock:1285910639285501953>",
+            "Sea Serpent": "<:YGOSeaSerpent:1285910649070948393>",
+            "Spellcaster": "<:YGOSpellcaster:1285910678468689940>",
+            "Thunder": "<:YGOThunder:1285910688350601292>",
+            "Warrior": "<:YGOWarrior:1285910721800179722>",
+            "Winged Beast": "<:YGOWingedBeast:1285910753446203426>",
+            "Wyrm": "<:YGOWyrm:1285910765110300705>",
+            "Zombie": "<:YGOZombie:1285910775092875329>",
+
+            "Normal": "<:YGONormal:1285910529805778966>",
+            "Continuous": "<:YGOContinuous:1285910039835447327>",
+            "Counter": "<:YGOCounter:1285910052766617632>",
+            "Field": "<:YGOField:1285910242755870801>",
+            "Quick-Play": "<:YGOQuickPlay:1285910595824123924>",
+            "Ritual": "<:YGORitual:1285910628745347173>",
+            "Equip": "<:YGOEquip:1285910207779569715>",
+
+            "Tuner": "<:YGOTuner:1285910711322673224>"
+        },
+        "level": {
+            "level": "<:YGOLevel:1285910304806670336>",
+            "rank": "<:YGORank:1285910605655576586>",
+            "link": "<:YGOLink:1285910334984425483>"
+        }, 
+        "scale": {
+            "left": "<:YGOPendulumL:1285910542631829514>",
+            "right": "<:YGOPendulumR:1285910554036408403>"
+        },
+        "arrow": {
+            "true": {
+                "Top": "<:YGOLinkU:1285910487200038964>",
+                "Bottom": "<:YGOLinkD:1285910348037226547>",
+                "Left": "<:YGOLinkL:1285910383978090517>",
+                "Right": "<:YGOLinkR:1285910475892199455>",
+                "Top-Left": "<:YGOLinkUL:1285910497186811975>",
+                "Top-Right": "<:YGOLinkUR:1285910507626299455>",
+                "Bottom-Left": "<:YGOLinkDL:1285910361110745155>",
+                "Bottom-Right": "<:YGOLinkDR:1285910372401807392>"
+            },
+            "false": {
+                "Top": "<:YGOLinkNU:1285910447601483880>",
+                "Bottom": "<:YGOLinkND:1285910396724838422>",
+                "Left": "<:YGOLinkNL:1285910428249100309>",
+                "Right": "<:YGOLinkNR:1285910437249945641>",
+                "Top-Left": "<:YGOLinkNUL:1285910457458229350>",
+                "Top-Right": "<:YGOLinkNUR:1285910467126231120>",
+                "Bottom-Left": "<:YGOLinkNDL:1285910405931073586>",
+                "Bottom-Right": "<:YGOLinkNDR:1285910417528590348>"
+            }
+        },
+        "rarity": {
+            "DL": {
+                "N": "<:YGODLN:1285910143971622978>",
+                "R": "<:YGODLR:1285910155992633374>",
+                "SR": "<:YGODLSR:1285910165702574141>",
+                "UR": "<:YGODLUR:1285910176519684166>"
+            },
+            "MD": {
+                "N": "<:YGOMDN:1286134544923230278>",
+                "R": "<:YGOMDR:1286134555736014900>",
+                "SR": "<:YGOMDSR:1286134566838603907>",
+                "UR": "<:YGOMDUR:1286134582336290907>"
+            }
+        },
+        "number": {
+            "0": ":zero:",
+            "1": ":one:",
+            "2": ":two:",
+            "3": ":three:",
+            "4": ":four:",
+            "5": ":five:",
+            "6": ":six:",
+            "7": ":seven:",
+            "8": ":eight:"
+        },
+        "lflist": {
+            "Forbidden": "<:YGOForbidden:1285910284011044967>",
+            "Banned": "<:YGOForbidden:1285910284011044967>",
+            "Limited 1": "<:YGOLimited:1285910325257830410>",
+            "Limited": "<:YGOLimited:1285910325257830410>",
+            "Limited 2": "<:YGOSemiLimited:1285910659221164144>",
+            "Semi-Limited": "<:YGOSemiLimited:1285910659221164144>"
+        }
+    },
+    "jank": {
+        "type": {
+            "Spell Card": "<:YGOSpell:1286135696721051741>",
+            "Trap Card": "<:YGOTrap:1286135741486858292>"
+        },
+        "attribute": {
+            "FIRE": "<:YGOFire:1286135144259911773>",
+            "WATER": "<:YGOWater:1286135777696288922>",
+            "EARTH": "<:YGOEarth:1286135075850686494>",
+            "WIND": "<:YGOWind:1286135792015638629>",
+            "LIGHT": "<:YGOLight:1286135201776271461>",
+            "DARK": "<:YGODark:1286134956996956210>",
+            "DIVINE": "<:YGODivine:1286134979771891762>"
+        },
+        "race": {
+            "Aqua": "<:YGOAqua:1286134873517588480>",
+            "Beast": "<:YGOBeast:1286134885626675224>",
+            "Beast-Warrior": "<:YGOBeastWarrior:1286134897668390952>",
+            "Creator-God": "<:YGOCreatorGod:1286134932892287027>",
+            "Cyberse": "<:YGOCyberse:1286134945244381276>",
+            "Dinosaur": "<:YGODinosaur:1286134967629512715>",
+            "Divine-Beast": "<:YGODivineBeast:1286134991356694702>",
+            "Dragon": "<:YGODragon:1286135050588655636>",
+            "Fairy": "<:YGOFairy:1286135109992321155>",
+            "Fiend": "<:YGOFiend:1286135132939489343>",
+            "Fish": "<:YGOFish:1286135157878689802>",
+            "Insect": "<:YGOInsect:1286135180263686184>",
+            "Machine": "<:YGOMachine:1286135445532446782>",
+            "Plant": "<:YGOPlant:1286135557424021524>",
+            "Psychic": "<:YGOPsychic:1286135570447204363>",
+            "Pyro": "<:YGOPyro:1286135588537237525>",
+            "Reptile": "<:YGOReptile:1286135627225763850>",
+            "Rock": "<:YGORock:1286135657210712137>",
+            "Sea Serpent": "<:YGOSeaSerpent:1286135670405857343>",
+            "Spellcaster": "<:YGOSpellcaster:1286135709215887452>",
+            "Thunder": "<:YGOThunder:1286135723249893557>",
+            "Warrior": "<:YGOWarrior:1286135766107426846>",
+            "Winged Beast": "<:YGOWingedBeast:1286135807656198164>",
+            "Wyrm": "<:YGOWyrm:1286135819521753148>",
+            "Zombie": "<:YGOZombie:1286135831215603776>",
+
+            "Normal": "<:YGONormal:1286135515548094464>",
+            "Continuous": "<:YGOContinuous:1286134909152530535>",
+            "Counter": "<:YGOCounter:1286134920191803453>",
+            "Field": "<:YGOField:1286135122592141312>",
+            "Quick-Play": "<:YGOQuickPlay:1286135602449748049>",
+            "Ritual": "<:YGORitual:1286135643038158899>",
+            "Equip": "<:YGOEquip:1286135093982920714>",
+
+            "Tuner": "<:YGOTuner:1286135754040279071>"
+        },
+        "level": {
+            "level": "<:YGOLevel:1286135190917480479>",
+            "rank": "<:YGORank:1286135614579933216>",
+            "link": "<:YGOLink:1286135225323360367>"
+        }, 
+        "scale": {
+            "left": "<:YGOPendulumL:1286135529544486933>",
+            "right": "<:YGOPendulumR:1286135541955559556>"
+        },
+        "arrow": {
+            "true": {
+                "Top": "<:YGOLinkU:1286135405313261588>",
+                "Bottom": "<:YGOLinkD:1286135246793736263>",
+                "Left": "<:YGOLinkL:1286135283032784988>",
+                "Right": "<:YGOLinkR:1286135394689224795>",
+                "Top-Left": "<:YGOLinkUL:1286135416621371474>",
+                "Top-Right": "<:YGOLinkUR:1286135433453109248>",
+                "Bottom-Left": "<:YGOLinkDL:1286135258437255270>",
+                "Bottom-Right": "<:YGOLinkDR:1286135270999326750>"
+            },
+            "false": {
+                "Top": "<:YGOLinkNU:1286135361634041917>",
+                "Bottom": "<:YGOLinkND:1286135297318322176>",
+                "Left": "<:YGOLinkNL:1286135337986428948>",
+                "Right": "<:YGOLinkNR:1286135348828704811>",
+                "Top-Left": "<:YGOLinkNUL:1286135372333453373>",
+                "Top-Right": "<:YGOLinkNUR:1286135383284908063>",
+                "Bottom-Left": "<:YGOLinkNDL:1286135308764713022>",
+                "Bottom-Right": "<:YGOLinkNDR:1286135323075674122>"
+            }
+        },
+        "rarity": {
+            "DL": {
+                "N": "<:YGODLN:1286135004950298654>",
+                "R": "<:YGODLR:1286135014873894933>",
+                "SR": "<:YGODLSR:1286135027582763051>",
+                "UR": "<:YGODLUR:1286135038697799830>"
+            },
+            "MD": {
+                "N": "<:YGOMDN:1286135458786447403>",
+                "R": "<:YGOMDR:1286135472724115527>",
+                "SR": "<:YGOMDSR:1286135486821437462>",
+                "UR": "<:YGOMDUR:1286135499383115796>"
+            }
+        },
+        "number": {
+            "0": ":zero:",
+            "1": ":one:",
+            "2": ":two:",
+            "3": ":three:",
+            "4": ":four:",
+            "5": ":five:",
+            "6": ":six:",
+            "7": ":seven:",
+            "8": ":eight:"
+        },
+        "lflist": {
+            "Forbidden": "<:YGOForbidden:1286135168595398728>",
+            "Banned": "<:YGOForbidden:1286135168595398728>",
+            "Limited 1": "<:YGOLimited:1286135212392054824>",
+            "Limited": "<:YGOLimited:1286135212392054824>",
+            "Limited 2": "<:YGOSemiLimited:1286135682896629804>",
+            "Semi-Limited": "<:YGOSemiLimited:1286135682896629804>"
+        }
+    }
+}

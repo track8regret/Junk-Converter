@@ -13,7 +13,7 @@ import { DuelLinksSetCommand } from './commands/duellinksset.js';
 import { MasterDuelSetCommand } from './commands/masterduelset.js';
 
 // grab dotenv variables
-const { APP_ID, PUBLIC_KEY, TOKEN, TOP_GG, TEST_SERVER } = process.env;
+const { APP_ID, PUBLIC_KEY, TOKEN, TOP_GG, TEST_SERVER, JANK } = process.env;
 
 // make the client
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -25,7 +25,13 @@ const creator = new SlashCreator({
 });
 
 // set up topgg autoposter
-const ap = AutoPoster(TOP_GG!, client)
+if (JANK === "false") {
+    const ap = AutoPoster(TOP_GG!, client)
+
+    ap.on('posted', () => {
+        console.log('Stats posted to Top.gg.')
+    })
+}
 
 await creator
     .withServer(
@@ -40,10 +46,10 @@ await creator
 
 client.login(TOKEN);
 client.on('ready', () => {
-    console.log('Junk Converter online.')
-    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Ishizu Tearlament', 'type': ActivityType.Playing}]})
+    if (JANK === "false") {
+        console.log('Junk Converter online.')
+    } else {
+        console.log('Jank Converter online. Let the testing begin.')
+    }
+    client.user?.setPresence({'status': 'online', 'afk': false, 'activities': [{'name': 'Plant Link', 'type': ActivityType.Playing}]})
 });
-
-ap.on('posted', () => {
-    console.log('Stats posted to Top.gg.')
-})
