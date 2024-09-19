@@ -1,6 +1,6 @@
 ##### Build Image #####
 
-FROM node:18 as builder
+FROM node:20 as builder
 
 # Move to working directory /build
 WORKDIR /build
@@ -20,7 +20,7 @@ RUN npm run-script build
 
 ##### Deployment Image #####
 
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Move to /bin directory as the place for resulting binary folder
 WORKDIR /bin

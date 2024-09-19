@@ -1,4 +1,4 @@
-import { SlashCommand, CommandOptionType, CommandContext, AutocompleteContext } from 'slash-create';
+import { SlashCommand, CommandOptionType, CommandContext, AutocompleteContext, InteractionContextType, ApplicationIntegrationType } from 'slash-create';
 import { getFuzzyCardSearch } from '../utilities/database-cache.js';
 import { searchCard } from '../utilities/searchutil.js';
 
@@ -13,7 +13,9 @@ export class SearchRushCommand extends SlashCommand {
                 description: 'The card name or ID you want to search for.',
                 required: true,
                 autocomplete: true
-            }]
+            }],
+            contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],
+            integrationTypes: [ApplicationIntegrationType.GUILD_INSTALL, ApplicationIntegrationType.USER_INSTALL]
         })
     }
 

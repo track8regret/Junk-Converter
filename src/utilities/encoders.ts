@@ -192,7 +192,7 @@ class NamelistEncoder extends Encoder {
             if (entry.trim() === '') continue;
 
             var prep = entry.split(/(?<=^\S+)\s/)
-            var amount = ~~prep[0]
+            var amount: number = ~~prep[0]
             var cardname = prep[1].trim();
             mdar.push([Number(amount), String(cardname)])
         }
@@ -202,7 +202,7 @@ class NamelistEncoder extends Encoder {
                 if (entry.trim() === '') continue;
 
                 var prep = entry.split(/(?<=^\S+)\s/)
-                var amount = ~~prep[0]
+                var amount: number = ~~prep[0]
                 var cardname = prep[1].trim();
                 exar.push([Number(amount), String(cardname)])
             }
@@ -213,7 +213,7 @@ class NamelistEncoder extends Encoder {
                 if (entry.trim() === '') continue;
 
                 var prep = entry.split(/(?<=^\S+)\s/)
-                var amount = ~~prep[0]
+                var amount: number = ~~prep[0]
                 var cardname = prep[1].trim();
                 sdar.push([Number(amount), String(cardname)])
             }
@@ -221,19 +221,19 @@ class NamelistEncoder extends Encoder {
 
         var mdai = [];
         for (const [amount, name] of mdar) {
-            for (var i = 0; i < amount; i++) {
+            for (var i = 0; i < +amount; i++) {
                 mdai.push(getIdForCardName(name as string))
             }
         }
         var exai = [];
         for (const [amount, name] of exar) {
-            for (var i = 0; i < amount; i++) {
+            for (var i = 0; i < +amount; i++) {
                 exai.push(getIdForCardName(name as string))
             }
         }
         var sdai = [];
         for (const [amount, name] of sdar) {
-            for (var i = 0; i < amount; i++) {
+            for (var i = 0; i < +amount; i++) {
                 sdai.push(getIdForCardName(name as string))
             }
         }
@@ -312,19 +312,19 @@ class KonamiEncoder extends Encoder {
 
         var mdai = [];
         for (const [amount, name] of mdar) {
-            for (var i = 0; i < amount; i++) {
+            for (var i = 0; i < +amount; i++) {
                 mdai.push(getIdForCardName(name as string))
             }
         }
         var exai = [];
         for (const [amount, name] of exar) {
-            for (var i = 0; i < amount; i++) {
+            for (var i = 0; i < +amount; i++) {
                 exai.push(getIdForCardName(name as string))
             }
         }
         var sdai = [];
         for (const [amount, name] of sdar) {
-            for (var i = 0; i < amount; i++) {
+            for (var i = 0; i < +amount; i++) {
                 sdai.push(getIdForCardName(name as string))
             }
         }

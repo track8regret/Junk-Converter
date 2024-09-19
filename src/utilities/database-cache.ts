@@ -4,6 +4,7 @@ import interval from 'interval-promise';
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
+// import { default as Fuse } from 'fuse.js'
 import { default as Fuse } from 'fuse.js'
 import { pipeline } from 'stream/promises';
 
@@ -314,7 +315,7 @@ const fuserush = new Fuse([...new Set([
 });
 
 export function getFuzzyCardSearch(input: string | number, format: 'ocgtcg' | 'rush'): string[] {
-    let results: Fuse.FuseResult<string>[];
+    let results;
     if (format === 'ocgtcg') {
         results = fuse.search(String(input), {limit: 100});
     } else {

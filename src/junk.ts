@@ -33,16 +33,16 @@ if (JANK === "false") {
     })
 }
 
-await creator
-    .withServer(
+await creator.withServer(
     new GatewayServer(
         (handler) => client.ws.on(GatewayDispatchEvents.InteractionCreate, handler)
-    )
-    )
-    .registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand, DuelLinksSetCommand, MasterDuelSetCommand]) // register commands
-    .on('commandError', (command, error) => console.error(`Command ${command.commandName}:`, error))
-    .syncCommands()
-    .syncCommandsIn(TEST_SERVER!)
+    ))
+await creator.registerCommands([ConvertCommand, InviteCommand, VoteCommand, SearchCommand, SearchRushCommand, DuelLinksSetCommand, MasterDuelSetCommand]) // register commands
+await creator.syncCommands()
+await creator.syncCommandsIn(TEST_SERVER!)
+
+await creator.on('commandError', (command, error) => console.error(`Command ${command.commandName}:`, error))
+
 
 client.login(TOKEN);
 client.on('ready', () => {

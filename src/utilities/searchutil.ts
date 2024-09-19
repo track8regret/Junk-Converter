@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import { YGOPRODeck, LinkMarker, Card as YPDCard } from '../utilities/ygoprodeck.js'
 import { DuelLinksMeta, MasterDuelMeta, Card as DLMCard, Set as DLMSet } from '../utilities/duellinksmeta.js';
 import { getIdForCardName, getTypeForId } from '../utilities/database-cache.js'
-import allemoji from '../utilities/emojis.json'
+import allemoji from '../utilities/emojis.json' with { type: "json" }
 const { JANK } = process.env
 
 var emojis = allemoji.junk
@@ -43,7 +43,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
 
     if (cardinfo === undefined) {
         // do something, exit
-        return ctx.send('The card you searched for turned up as undefined in our search.\nUsually, this happens when YGOPRODeck doesn\'t have information on a card we list.\nIf you suspect it\'s something else, please try again.', {ephemeral: true})
+        return ctx.send({content: 'The card you searched for turned up as undefined in our search.\nUsually, this happens when YGOPRODeck doesn\'t have information on a card we list.\nIf you suspect it\'s something else, please try again.', ephemeral: true})
     }
 
     let embedfields: Array<EmbedField> = [];
@@ -268,7 +268,7 @@ export async function searchSet (query: string, ctx: CommandContext, game: 'dl' 
 
     if (setresult === undefined) {
         // do something, exit
-        return ctx.send('The set you searched for turned up as undefined in our search.\nEither you misspelled your input, or DLM Corp. doesn\'t currently have information on this set.\nIf you suspect it\'s something else, please try again.', {ephemeral: true})
+        return ctx.send({content: 'The set you searched for turned up as undefined in our search.\nEither you misspelled your input, or DLM Corp. doesn\'t currently have information on this set.\nIf you suspect it\'s something else, please try again.', ephemeral: true})
     }
 
     let embedfields: Array<EmbedField> = [];

@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import interval from 'interval-promise';
-import { default as Fuse } from 'fuse.js';
+import Fuse from 'fuse.js';
 
 export interface Card {
     _id: string,
@@ -141,7 +141,7 @@ const fusemd = new Fuse(mdmsets, {
 });
 
 export function getFuzzySetSearch (input: string, game: 'dl' | 'md'): string[] {
-    let results: Fuse.FuseResult<string>[];
+    let results;
     if (game === 'dl') {
         results = fusedl.search(String(input), {limit: 100});
     } else {
