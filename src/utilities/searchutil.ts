@@ -47,7 +47,6 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
     }
 
     let embedfields: Array<EmbedField> = [];
-    let acquirefields: Array<EmbedField> = [];
 
     let tradban: string = '';
     if (cardinfo.banlist_info) {
@@ -221,12 +220,21 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         }
 
         if (dltext != '' && mdtext != '') {
-            acquirefields.push({name: 'Duel Links', value: dltext, inline: true})
-            acquirefields.push({name: 'Master Duel', value: mdtext, inline: true})
+            if (embedfields.length > 1) {
+                embedfields.push({name: '​', value: '​'})
+            }
+            embedfields.push({name: 'Duel Links', value: dltext, inline: true})
+            embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
         } else if (dltext != '' && mdtext === '') {
-            acquirefields.push({name: 'Duel Links', value: dltext, inline: true})
+            if (embedfields.length > 1) {
+                embedfields.push({name: '​', value: '​'})
+            }
+            embedfields.push({name: 'Duel Links', value: dltext, inline: true})
         } else if (dltext === '' && mdtext != '') {
-            acquirefields.push({name: 'Master Duel', value: mdtext, inline: true})
+            if (embedfields.length > 1) {
+                embedfields.push({name: '​', value: '​'})
+            }
+            embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
         }
     }
 
@@ -243,16 +251,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + (emojis.race[cardinfo.race as keyof typeof emojis.race] ?? '') + (cardinfo.type.includes('Tuner') ? emojis.race['Tuner'] : '') + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : '') + ((tradban !== '') ? tradban : ''),
         fields: embedfields
     }
-
-    if (acquirefields) {
-        var acquireembed: MessageEmbedOptions = {
-            color: 0x45C6FA,
-            fields: acquirefields
-        }
-        return ctx.send({embeds: [embed, acquireembed]})
-    } else {
-        return ctx.send({embeds: [embed]})
-    }
+    return ctx.send({embeds: [embed]})
 }
 
 export async function searchSet (query: string, ctx: CommandContext, game: 'dl' | 'md') {
