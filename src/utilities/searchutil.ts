@@ -4,6 +4,7 @@ import { YGOPRODeck, LinkMarker, Card as YPDCard } from '../utilities/ygoprodeck
 import { DuelLinksMeta, MasterDuelMeta, Card as DLMCard, Set as DLMSet } from '../utilities/duellinksmeta.js';
 import { getIdForCardName, getTypeForId } from '../utilities/database-cache.js'
 import allemoji from '../utilities/emojis.json' with { type: "json" }
+import { ActionRow } from 'discord.js';
 const { JANK } = process.env
 
 var emojis = allemoji.junk
@@ -47,6 +48,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
     }
 
     let embedfields: Array<EmbedField> = [];
+    let acquirefields: Array<EmbedField> = [];
 
     let tradban: string = '';
     if (cardinfo.banlist_info) {
@@ -225,18 +227,19 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
                 }
             }
         }
-
+        /*
         if ((dltext != '' || mdtext != '' || settext != '') && embedfields.length > 1) {
             embedfields.push({name: '​', value: '​'})
         }
+        */
         if (settext != '') {
-            embedfields.push({name: 'Trading Card Game', value: settext, inline: false})
+            acquirefields.push({name: 'Trading Card Game', value: settext, inline: false})
         }
         if (dltext != '') {
-            embedfields.push({name: 'Duel Links', value: dltext, inline: true})
+            acquirefields.push({name: 'Duel Links', value: dltext, inline: true})
         }
         if (mdtext != '') {
-            embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
+            acquirefields.push({name: 'Master Duel', value: mdtext, inline: true})
         }
     }
 
@@ -253,7 +256,16 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + (emojis.race[cardinfo.race as keyof typeof emojis.race] ?? '') + (cardinfo.type.includes('Tuner') ? emojis.race['Tuner'] : '') + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : '') + ((tradban !== '') ? tradban : ''),
         fields: embedfields
     }
-    return ctx.send({embeds: [embed]})
+    if (acquirefields) {
+        var acquireembed: MessageEmbedOptions = {
+            color: 0x19813A,
+            fields: acquirefields
+        }
+
+        return ctx.send({embeds: [embed, acquireembed]})
+    } else {
+        return ctx.send({embeds: [embed]})
+    }
 }
 
 export async function searchSet (query: string, ctx: CommandContext, game: 'dl' | 'md') {
