@@ -243,7 +243,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
             text: ((!format || format === 'ocgtcg') ? 'ID: ' + cardinfo.id : 'Rush ID: ' + cardinfo.id)
         },
         title: cardinfo.name,
-        url: 'https://ygoprodeck.com/card/?search=' + encodeURIComponent(cardinfo.id),
+        url: 'https://yugipedia.com/wiki/' + encodeURIComponent(cardinfo.id),
         color: embedcolor,
         thumbnail: {
             url: ((!format || format === 'ocgtcg') ? 'https://images.ygoprodeck.com/images/cards_cropped/' + cardinfo.id + '.jpg' : 'https://images.ygoprodeck.com/images/cards/' + cardinfo.id + '.jpg')
