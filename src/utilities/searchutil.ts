@@ -146,9 +146,17 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         }
     }
 
-    if (dlcard && dlcard.rarity && format !== 'rush' || mdcard && mdcard.rarity && format !== 'rush') {
+    if ((cardinfo.card_sets && format !== 'rush') || (dlcard && dlcard.rarity && format !== 'rush') || (mdcard && mdcard.rarity && format !== 'rush')) {
+        let settext = '';
         let dltext = '';
         let mdtext = '';
+
+        if (cardinfo.card_sets && cardinfo.card_sets.length != 0) {
+            settext += '**Sets:**'
+            for (const set of cardinfo.card_sets) {
+                settext += '\n[' + set.set_name + '](https://yugipedia.com/wiki/' + encodeURIComponent(set.set_name) + ') - [' + set.set_code + '](https://yugipedia.com/wiki/' + encodeURIComponent(set.set_code) + ') (' + set.set_rarity + ')'
+            }
+        }
         
         if (dlcard && dlcard.rarity) {
             dltext += '**Rarity:** ' + emojis.rarity.DL[dlcard.rarity]
@@ -218,21 +226,16 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
             }
         }
 
-        if (dltext != '' && mdtext != '') {
-            if (embedfields.length > 1) {
-                embedfields.push({name: '​', value: '​'})
-            }
+        if ((dltext != '' || mdtext != '' || settext != '') && embedfields.length > 1) {
+            embedfields.push({name: '​', value: '​'})
+        }
+        if (settext != '') {
+            embedfields.push({name: 'Trading Card Game', value: settext, inline: true})
+        }
+        if (dltext != '') {
             embedfields.push({name: 'Duel Links', value: dltext, inline: true})
-            embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
-        } else if (dltext != '' && mdtext === '') {
-            if (embedfields.length > 1) {
-                embedfields.push({name: '​', value: '​'})
-            }
-            embedfields.push({name: 'Duel Links', value: dltext, inline: true})
-        } else if (dltext === '' && mdtext != '') {
-            if (embedfields.length > 1) {
-                embedfields.push({name: '​', value: '​'})
-            }
+        }
+        if (mdtext != '') {
             embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
         }
     }
