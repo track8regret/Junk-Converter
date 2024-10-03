@@ -229,14 +229,14 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         if ((dltext != '' || mdtext != '' || settext != '') && embedfields.length > 1) {
             embedfields.push({name: '​', value: '​'})
         }
+        if (settext != '') {
+            embedfields.push({name: 'Trading Card Game', value: settext, inline: false})
+        }
         if (dltext != '') {
             embedfields.push({name: 'Duel Links', value: dltext, inline: true})
         }
         if (mdtext != '') {
             embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
-        }
-        if (settext != '') {
-            embedfields.push({name: 'Trading Card Game', value: settext, inline: true})
         }
     }
 
