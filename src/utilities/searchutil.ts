@@ -104,8 +104,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         [cardinfo => cardinfo.type.includes('Effect'), 0xC75227],
         [cardinfo => cardinfo.type.includes('Spell'), 0x008B78],
         [cardinfo => cardinfo.type.includes('Trap'), 0xA5146F],
-        [cardinfo => cardinfo.type.includes('Normal'), 0xCC9A53],
-        [cardinfo => cardinfo.type.includes('Tuner'), 0x19813A]
+        [cardinfo => cardinfo.type.includes('Normal'), 0xCC9A53]
     ];
 
     for (const [matcher, color] of matchers) {

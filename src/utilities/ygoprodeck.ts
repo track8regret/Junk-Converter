@@ -5,6 +5,8 @@ export interface Card {
     name: string;
     type: CardType;
     desc: string;
+    pend_desc?: string;
+    monster_desc?: string;
     atk?: number;
     def?: number;
     level?: number;
@@ -12,6 +14,7 @@ export interface Card {
     attribute?: Attribute;
     archetype?: string;
     scale?: number;
+    ygoprodeck_url: string;
     card_sets?: CardSet[];
     banlist_info?: BanlistInfo;
     linkval?: number;
