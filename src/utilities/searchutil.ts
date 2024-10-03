@@ -152,7 +152,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         let mdtext = '';
 
         if (cardinfo.card_sets && cardinfo.card_sets.length != 0) {
-            settext += '**Sets:**'
+            settext += '**Prints:**'
             for (const set of cardinfo.card_sets) {
                 settext += '\n[' + set.set_name + '](https://yugipedia.com/wiki/' + encodeURIComponent(set.set_name) + ') - [' + set.set_code + '](https://yugipedia.com/wiki/' + encodeURIComponent(set.set_code) + ') (' + set.set_rarity + ')'
             }
@@ -229,14 +229,14 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         if ((dltext != '' || mdtext != '' || settext != '') && embedfields.length > 1) {
             embedfields.push({name: '​', value: '​'})
         }
-        if (settext != '') {
-            embedfields.push({name: 'Trading Card Game', value: settext, inline: true})
-        }
         if (dltext != '') {
             embedfields.push({name: 'Duel Links', value: dltext, inline: true})
         }
         if (mdtext != '') {
             embedfields.push({name: 'Master Duel', value: mdtext, inline: true})
+        }
+        if (settext != '') {
+            embedfields.push({name: 'Trading Card Game', value: settext, inline: true})
         }
     }
 
