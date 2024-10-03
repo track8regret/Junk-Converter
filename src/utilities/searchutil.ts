@@ -256,7 +256,7 @@ export async function searchCard (query: string, ctx: CommandContext, format?: '
         description: ((cardinfo.attribute && emojis.attribute[cardinfo.attribute]) ?? emojis.type[cardinfo.type as keyof typeof emojis.type]) + (emojis.race[cardinfo.race as keyof typeof emojis.race] ?? '') + (cardinfo.type.includes('Tuner') ? emojis.race['Tuner'] : '') + ' **' + ((cardinfo.attribute && cardinfo.attribute + '/' + cardinfo.race + ' ' + cardinfo.type) ?? cardinfo.race + ' ' + cardinfo.type) + '**' + ((leveltext != '') ? '\n' + leveltext : '') + ((tradban !== '') ? tradban : ''),
         fields: embedfields
     }
-    if (acquirefields) {
+    if (acquirefields && ctx.options['acquisition']) {
         var acquireembed: MessageEmbedOptions = {
             color: 0x19813A,
             fields: acquirefields

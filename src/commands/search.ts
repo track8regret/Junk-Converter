@@ -13,6 +13,11 @@ export class SearchCommand extends SlashCommand {
                 description: 'The card name or ID you want to search for.',
                 required: true,
                 autocomplete: true,
+            }, {
+                type: CommandOptionType.BOOLEAN,
+                name: 'acquisition',
+                description: 'Optionally show information on where the card can be found in the TCG, Duel Links, and Master Duel.',
+                required: false
             }],
             contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],
             integrationTypes: [ApplicationIntegrationType.GUILD_INSTALL, ApplicationIntegrationType.USER_INSTALL]
