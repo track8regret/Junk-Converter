@@ -20,7 +20,7 @@ const RIO = new RushCardIO();
 
 export async function searchCard (query: string, ctx: CommandContext) {
     switch (ctx.commandName) {
-        case 's':
+            case 's':
             let cardinfo: YPDCard | undefined;
             let dlcard: DLMCard | undefined;
             let mdcard: DLMCard | undefined;
