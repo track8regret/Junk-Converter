@@ -8,6 +8,8 @@ export interface Card {
     def?: number;
     level?: number;
     race: CardRace;
+    attribute?: Attribute;
+    desc: string;
     archetype?: string;
     archetype_relation?: string;
     action?: string;

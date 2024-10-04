@@ -26,6 +26,6 @@ export class SearchRushCommand extends SlashCommand {
     }
 
     async run(ctx: CommandContext) {
-        return await searchCard(ctx.options.query, ctx, 'rush')
+        return await searchCard(ctx.options.query, ctx)
     }
 }

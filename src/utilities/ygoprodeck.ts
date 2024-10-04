@@ -50,6 +50,7 @@ export interface Artwork {
     id: number;
     image_url: string;
     image_url_small: string;
+    image_url_cropped: string;
 }
 
 export interface Price {
@@ -69,21 +70,11 @@ export class YGOPRODeck {
 
     constructor() {}
 
-    async searchCard (input: string | number, format?: 'ocgtcg' | 'rush'): Promise<Card | undefined> {
+    async searchCard (input: string | number): Promise<Card | undefined> {
         let searchtype: '?id=' | '?name=';
         let response: Response;
         !isNaN(Number(input)) ? searchtype = '?id=' : searchtype = '?name='
-        switch (format) {
-            default:
-                response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input)).then(e => e.json()) as Response;
-                break;
-            case 'ocgtcg':
-                response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input)).then(e => e.json()) as Response;
-                break;
-            case 'rush':
-                response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input) + '&format=rush%20duel').then(e => e.json()) as Response;
-                break;
-        }
+        response = await fetch(this.baseURL + '/cardinfo.php' + searchtype + encodeURIComponent(input)).then(e => e.json()) as Response;
         return (response.data ? response.data[0] : undefined)
     }
 }
