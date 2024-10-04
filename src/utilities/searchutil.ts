@@ -20,7 +20,7 @@ const RIO = new RushCardIO();
 
 export async function searchCard (query: string, ctx: CommandContext) {
     switch (ctx.commandName) {
-            case 's':
+            case 'search':
             let cardinfo: YPDCard | undefined;
             let dlcard: DLMCard | undefined;
             let mdcard: DLMCard | undefined;
@@ -243,7 +243,7 @@ export async function searchCard (query: string, ctx: CommandContext) {
                 return ctx.send({embeds: [embed], ephemeral: ctx.options['private']})
             }
 
-            case 'sr':
+            case 'searchrush':
             let rushinfo: RIOCard | undefined;
             if (!isNaN(Number(query))) {
                 return;
