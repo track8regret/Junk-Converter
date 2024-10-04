@@ -5,7 +5,7 @@ import { searchCard } from '../utilities/searchutil.js';
 export class SearchCommand extends SlashCommand {
     constructor(creator: any) {
         super(creator, {
-            name: 's',
+            name: 'search',
             description: 'Searches for a specific Yu-Gi-Oh! card by name or card ID.',
             options: [{
                 type: CommandOptionType.STRING,
@@ -16,7 +16,12 @@ export class SearchCommand extends SlashCommand {
             }, {
                 type: CommandOptionType.BOOLEAN,
                 name: 'acquisition',
-                description: 'Optionally show information on where the card can be found in the TCG, Duel Links, and Master Duel.',
+                description: 'Optionally show information on where the card can be found in the TCG, Duel Links, and Master Duel. False by default.',
+                required: false
+            }, {
+                type: CommandOptionType.BOOLEAN,
+                name: 'private',
+                description: 'Optionally have the response only be visible to yourself, instead of everybody. False by default.',
                 required: false
             }],
             contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],

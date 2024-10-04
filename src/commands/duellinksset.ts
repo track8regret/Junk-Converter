@@ -5,7 +5,7 @@ import { searchSet } from '../utilities/searchutil.js';
 export class DuelLinksSetCommand extends SlashCommand {
     constructor(creator: any) {
         super(creator, {
-            name: 'dls',
+            name: 'setdl',
             description: 'Searches for a specific Yu-Gi-Oh! Duel Links card set by name.',
             options: [{
                 type: CommandOptionType.STRING,
@@ -13,6 +13,11 @@ export class DuelLinksSetCommand extends SlashCommand {
                 description: 'The set name you want to search for.',
                 required: true,
                 autocomplete: true
+            }, {
+                type: CommandOptionType.BOOLEAN,
+                name: 'private',
+                description: 'Optionally have the response only be visible to yourself, instead of everybody. False by default.',
+                required: false
             }],
             contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],
             integrationTypes: [ApplicationIntegrationType.GUILD_INSTALL, ApplicationIntegrationType.USER_INSTALL]

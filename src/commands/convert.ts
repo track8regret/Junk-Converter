@@ -17,7 +17,7 @@ function sendModalAndGetValues(ctx: ModalSendableContext, options: ModalOptions)
 export class ConvertCommand extends SlashCommand {
     constructor(creator: any) {
         super(creator, {
-            name: 'c',
+            name: 'convert',
             description: 'Converts a Yu-Gi-Oh deck from one format to another.',
             options: [{
                 type: CommandOptionType.STRING,
@@ -75,6 +75,11 @@ export class ConvertCommand extends SlashCommand {
                 type: CommandOptionType.STRING,
                 name: 'name',
                 description: 'The name you want the deck to output with. Only relevant when converting to YDK or JSON.'
+            }, {
+                type: CommandOptionType.BOOLEAN,
+                name: 'private',
+                description: 'Optionally have the response only be visible to yourself, instead of everybody. False by default.',
+                required: false
             }],
             contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],
             integrationTypes: [ApplicationIntegrationType.GUILD_INSTALL, ApplicationIntegrationType.USER_INSTALL]
@@ -254,7 +259,7 @@ export class ConvertCommand extends SlashCommand {
         };
 
         if (deck === null || deck === emptyDeck) {
-            return ctx.send('You\'ve managed to do something that made the deck decode come out as being empty. Congratulations.');
+            return ctx.send({content: 'You\'ve managed to do something that made the deck decode come out as being empty. Congratulations.', ephemeral: ctx.options['private']});
         }
 
         switch (ctx.options.to) {
@@ -266,9 +271,9 @@ export class ConvertCommand extends SlashCommand {
                 var attachment = { file: buffer, name: (ctx.options.name ?? deck.deckName ?? 'result') + '.ydk' };
 
                 if (modal) {
-                    modal.send({content: 'Here\'s your converted YDK file:', files: [attachment] })
+                    modal.send({content: 'Here\'s your converted YDK file:', files: [attachment], ephemeral: ctx.options['private']})
                 } else {
-                    ctx.send({content: 'Here\'s your converted YDK file:', files: [attachment] })
+                    ctx.send({content: 'Here\'s your converted YDK file:', files: [attachment], ephemeral: ctx.options['private']})
                 }
                 break;
             case 'Convert to a YDKE string.':
@@ -276,9 +281,9 @@ export class ConvertCommand extends SlashCommand {
                 var result = await ydkeencoder.encode(deck);
 
                 if (modal) {
-                    modal.send('Here\'s your converted YDKe link:\n`' + result + '`')
+                    modal.send({content: 'Here\'s your converted YDKe link:\n`' + result + '`', ephemeral: ctx.options['private']})
                 } else {
-                    ctx.send('Here\'s your converted YDKe link:\n`' + result + '`')
+                    ctx.send({content: 'Here\'s your converted YDKe link:\n`' + result + '`', ephemeral: ctx.options['private']})
                 }
                 break;
             case 'Convert to an Omega string.':
@@ -286,9 +291,9 @@ export class ConvertCommand extends SlashCommand {
                 var result = await omegaencoder.encode(deck);
 
                 if (modal) {
-                    modal.send('Here\'s your converted Omega code:\n`' + result + '`')
+                    modal.send({content: 'Here\'s your converted Omega code:\n`' + result + '`', ephemeral: ctx.options['private']})
                 } else {
-                    ctx.send('Here\'s your converted Omega code:\n`' + result + '`')
+                    ctx.send({content: 'Here\'s your converted Omega code:\n`' + result + '`', ephemeral: ctx.options['private']})
                 }
                 break;
             case 'Convert to a list of card names.':
@@ -296,9 +301,9 @@ export class ConvertCommand extends SlashCommand {
                 var result = await namelistencoder.encode(deck);
 
                 if (modal) {
-                    modal.send('Here\'s your converted card name list:\n```' + result + '```')
+                    modal.send({content: 'Here\'s your converted card name list:\n```' + result + '```', ephemeral: ctx.options['private']})
                 } else {
-                    ctx.send('Here\'s your converted card name list:\n```' + result + '```')
+                    ctx.send({content: 'Here\'s your converted card name list:\n```' + result + '```', ephemeral: ctx.options['private']})
                 }
                 break;
             case 'Convert to a .JSON file.':
@@ -308,9 +313,9 @@ export class ConvertCommand extends SlashCommand {
                 var attachment = { file: buffer, name: (ctx.options.name ?? deck.deckName ?? 'result') + '.json' };
 
                 if (modal) {
-                    modal.send({content: 'Here\'s your converted JSON file:', files: [attachment] })
+                    modal.send({content: 'Here\'s your converted JSON file:', files: [attachment], ephemeral: ctx.options['private']})
                 } else {
-                    ctx.send({content: 'Here\'s your converted JSON file:', files: [attachment] })
+                    ctx.send({content: 'Here\'s your converted JSON file:', files: [attachment], ephemeral: ctx.options['private']})
                 }
                 break;
         }

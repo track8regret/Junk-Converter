@@ -5,7 +5,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 export class InviteCommand extends SlashCommand {
   constructor(creator: any) {
     super(creator, {
-      name: 'i',
+      name: 'invite',
       description: 'Gives information about Junk Converter, as well as an invite link.',
       deferEphemeral: true,
       contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],

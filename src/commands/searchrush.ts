@@ -5,14 +5,19 @@ import { searchCard } from '../utilities/searchutil.js';
 export class SearchRushCommand extends SlashCommand {
     constructor(creator: any) {
         super(creator, {
-            name: 'sr',
-            description: 'Searches for a specific Yu-Gi-Oh! Rush Duel card by name or card ID.',
+            name: 'searchrush',
+            description: 'Searches for a specific Yu-Gi-Oh! Rush Duel card by name.',
             options: [{
                 type: CommandOptionType.STRING,
                 name: 'query',
-                description: 'The card name or ID you want to search for.',
+                description: 'The card name you want to search for.',
                 required: true,
                 autocomplete: true
+            }, {
+                type: CommandOptionType.BOOLEAN,
+                name: 'private',
+                description: 'Optionally have the response only be visible to yourself, instead of everybody. False by default.',
+                required: false
             }],
             contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],
             integrationTypes: [ApplicationIntegrationType.GUILD_INSTALL, ApplicationIntegrationType.USER_INSTALL]

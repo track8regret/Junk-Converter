@@ -238,9 +238,9 @@ export async function searchCard (query: string, ctx: CommandContext) {
                     fields: acquirefields
                 }
 
-                return ctx.send({embeds: [embed, acquireembed]})
+                return ctx.send({embeds: [embed, acquireembed], ephemeral: ctx.options['private']})
             } else {
-                return ctx.send({embeds: [embed]})
+                return ctx.send({embeds: [embed], ephemeral: ctx.options['private']})
             }
 
             case 'sr':
@@ -312,7 +312,7 @@ export async function searchCard (query: string, ctx: CommandContext) {
                 description: ((rushinfo.attribute && emojis.attribute[rushinfo.attribute]) ?? emojis.type[rushinfo.type as keyof typeof emojis.type]) + (emojis.race[rushinfo.race as keyof typeof emojis.race] ?? '') + (rushinfo.type.includes('Tuner') ? emojis.race['Tuner'] : '') + ' **' + ((rushinfo.attribute && rushinfo.attribute + '/' + rushinfo.race + ' ' + rushinfo.type) ?? rushinfo.race + ' ' + rushinfo.type) + '**' + ((rushlevel != '') ? '\n' + rushlevel : ''),
                 fields: rushfields
             }
-            return ctx.send({embeds: [rushembed]})
+            return ctx.send({embeds: [rushembed], ephemeral: ctx.options['private']})
         }
     }
 
@@ -383,5 +383,5 @@ export async function searchSet (query: string, ctx: CommandContext, game: 'dl' 
         }
     }
 
-    return ctx.send({embeds: [embed]})
+    return ctx.send({embeds: [embed], ephemeral: ctx.options['private']})
 };
