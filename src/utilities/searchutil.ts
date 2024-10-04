@@ -294,8 +294,10 @@ export async function searchCard (query: string, ctx: CommandContext) {
                 }
             }
 
-            rushfields.push({name: 'ATK/DEF', value: '**' + rushinfo.atk + ' / ' + rushinfo.def + '**', inline: true})
-            rushlevel += emojis.level.level + ' **Level ' + rushinfo.level + '**'
+            if (rushinfo.type.includes('Monster')) {
+                rushfields.push({name: 'ATK/DEF', value: '**' + (rushinfo.atk ? rushinfo.atk : '0') + ' / ' + (rushinfo.def ? rushinfo.def : '0') + '**', inline: true})
+                rushlevel += emojis.level.level + ' **Level ' + rushinfo.level + '**'
+            }
 
             var rushembed: MessageEmbedOptions = {
                 footer: {
