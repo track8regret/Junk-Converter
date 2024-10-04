@@ -16,12 +16,12 @@ export class SearchCommand extends SlashCommand {
             }, {
                 type: CommandOptionType.BOOLEAN,
                 name: 'acquisition',
-                description: 'Optionally show information on where the card can be found in the TCG, Duel Links, and Master Duel. False by default.',
+                description: 'Show where the card can be found in the TCG, Duel Links, and Master Duel. False by default.',
                 required: false
             }, {
                 type: CommandOptionType.BOOLEAN,
                 name: 'private',
-                description: 'Optionally have the response only be visible to yourself, instead of everybody. False by default.',
+                description: 'Have the response only be visible to yourself, instead of everybody. False by default.',
                 required: false
             }],
             contexts: [InteractionContextType.PRIVATE_CHANNEL, InteractionContextType.BOT_DM, InteractionContextType.GUILD],
