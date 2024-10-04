@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+const { JANK } = process.env;
 
 export interface Card {
     name: string;
@@ -34,7 +35,10 @@ export class RushCardIO {
     async searchCard (input: string): Promise<Card | undefined> {
         let response: Response;
         response = await fetch(this.baseURL + '/search.php?limit=15&sort=name&n=' + encodeURIComponent(input)).then(e => e.json()) as Response;
-
+        if (JANK) {
+            console.log('Rush search made for "' + input + '". Resulting search URL is https://rushcard.io/api/search.php?limit=15&sort=name&n=' + encodeURIComponent(input))
+        }
+        (response.data ? (console.log('RushCard.IO responded with ' + response.data.length + ' results.')) : console.log('RushCard.IO did not provide any results.'))
         return (response.data ? response.data[0] : undefined)
     }
 }
