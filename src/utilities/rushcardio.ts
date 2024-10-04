@@ -23,9 +23,7 @@ export type CardType = 'Normal Monster' | 'Effect Monster' | 'Tuner Monster' | '
 export type CardRace = 'Continuous' | 'Quick-Play' | 'Equip' | 'Normal' | 'Counter' | 'Beast' | 'Aqua' | 'Insect' | 'Fish' | 'Field' | 'Spellcaster' | 'Machine' | 'Ritual' | 'Warrior' | 'Fiend' | 'Beast-Warrior' | 'Rock' | 'Fairy' | 'Dragon' | 'Sea Serpent' | 'Plant' | 'Cyberse' | 'Wyrm' | 'Winged Beast' | 'Reptile' | 'Psychic' | 'Pyro' | 'Dinosaur' | 'Thunder' | 'Zombie' | 'Creator-God' | 'Illusion' | 'Galaxy' | 'High Dragon' | 'Cyborg' | 'Omega Psychic' | 'Celestial Warri' | 'Magical Knight'
 export type Attribute = 'LIGHT' | 'EARTH' | 'WATER' | 'WIND' | 'FIRE' | 'DARK';
 
-export interface Response {
-    data: Card[];
-}
+export type Response = Card[];
 
 export class RushCardIO {
     protected baseURL: string = 'https://rushcard.io/api';
@@ -35,10 +33,14 @@ export class RushCardIO {
     async searchCard (input: string): Promise<Card | undefined> {
         let response: Response;
         response = await fetch(this.baseURL + '/search.php?limit=15&sort=name&n=' + encodeURIComponent(input)).then(e => e.json()) as Response;
+        /*
         if (JANK) {
-            console.log('Rush search made for "' + input + '". Resulting search URL is https://rushcard.io/api/search.php?limit=15&sort=name&n=' + encodeURIComponent(input))
+            console.log('Rush search made for "' + input + '". Resulting search URL is https://rushcard.io/api/search.php?limit=15&sort=name&n=' + encodeURIComponent(input));
+            console.log('Here is the raw response:');
+            console.log(response);
+            (response ? (console.log('RushCard.IO responded with ' + response.length + ' result(s).')) : console.log('RushCard.IO did not provide any results.'))
         }
-        (response.data ? (console.log('RushCard.IO responded with ' + response.data.length + ' results.')) : console.log('RushCard.IO did not provide any results.'))
-        return (response.data ? response.data[0] : undefined)
+        */
+        return (response ? response[0] : undefined)
     }
 }
